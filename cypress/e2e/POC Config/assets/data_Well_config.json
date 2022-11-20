@@ -1,6 +1,6 @@
 [{
   "wellSettings": [{
-    "wellName": [3, 50],
+    "wellName": ["Well name test", "Well test KWM-145.5"],
     "latitude": [-90, 90],
     "longitude": [-180, 180],
     "password": [8, 50]
