@@ -14,6 +14,7 @@ describe('POC Configuration', () => {
         cy.fixture('../e2e/POC Config/assets/data_Well_config')
             .then(async (e) => {
                 data.push(e);
+                console.log(data);
             });
 
         // test commands
