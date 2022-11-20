@@ -1,0 +1,59 @@
+[{
+  "fillage": {
+    "fillageSetPoint": [0, 100],
+    "pumpOffStrokesAllowed": [0, 2],
+    "startUpStrokes": [0, 1],
+    "secondaryFillageSetPoint": [0, 100]
+  },
+  "pip": {
+    "pipSetPoint": [0, 100],
+    "pumpOffStrokesAllowed": [0, 2],
+    "startUpStrokes": [0, 1],
+    "secondaryPIPSetPoint": [0, 100]
+  }
+},
+{
+  "dynagraph": {
+    "fillbase": [0, 54],
+    "dampingFactor": [1, 0.01],
+    "mechanicalFriction": [1, 11.2]
+  }
+},
+{
+  "vfd": {
+    "peakWorkingSpeed": [0, 60],
+    "minWorkingSpeed": [0, 40],
+    "speedIncrease": [0, 1],
+    "speedDecrease": [0, 1],
+    "startUpSpeed": [0, 60],
+    "deadBand": [0, 3],
+    "deadBandStrokes": [0, 1],
+    "constantSpeed": [0, 60],
+    "inverterRatedPower": [1, 10],
+    "motorRatedPower": [1, 10]
+  }
+},
+{
+  "vfdSpeedZone": {
+    "percent": {
+      "pos1": [10, 90],
+      "speed1": [60, 100],
+      "pos2": [11, 89],
+      "speed2": [60, 100],
+      "pos3": [12, 88],
+      "speed3": [60, 100],
+      "pos4": [13, 87],
+      "speed4": [60, 100]
+    },
+    "in": {
+      "pos1": [17, 153],
+      "speed1": [36, 0],
+      "pos2": [18, 152],
+      "speed2": [37, 0],
+      "pos3": [19, 151],
+      "speed3": [36, 0],
+      "pos4": [20, 150],
+      "speed4": [38, 0]
+    }
+  }
+}]
