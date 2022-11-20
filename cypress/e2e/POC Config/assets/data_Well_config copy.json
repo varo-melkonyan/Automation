@@ -1,0 +1,56 @@
+[{
+  "wellSettings": [{
+    "wellName": ["Well name test", "Well test KWM-145.5"],
+    "latitude": [-90, 90],
+    "longitude": [-180, 180],
+    "password": [8, 50]
+  }],
+  "surfaceEquipment": [{
+    "canonicalStrokeLength": [0, 500],
+    "stuffingBoxFriction": [0, 1000],
+    "topLoad": [1, 100]
+  }],
+  "fge_Properties": [{
+    "oilApiGravity": [[10, 50], [10, 1500]],
+    "waterSpecificGravity": [[0.9, 1.5], [30, 4000]],
+    "sfWaterCut": [[0, 1], [1.05, 1.75]],
+    "fluidViscosity": [["?"], [0, 0.7]],
+    "sfGasPressureCanonicalValue": [0, 3000],
+    "sfFluidPressureCanonicalValue": [0, 3000],
+    "sfTemperature": [40, 200],
+    "gasSpecificGravity": [0.45, 2],
+    "atmosphericPressure": [12, 15],
+    "temperatureGradient": [0.2, 4.5]
+  }],
+  "rods" : [{
+    "rodString_lengths": [0, 100000],
+    "rodString_diameters": ["?"], //validation?
+    "rodString_linearWeights": [0, 20],
+    "rodString_stiffnesses": [4, 40],
+    "mixture_serviceFactor": ["?"] //validation?
+  }],
+  "tubing": [{
+    "isTubingAnchoredTubing": [1000, 20000],
+    "tubing_lengths": [20, 20000],
+    "tubing_innerDiameters": [0, 10],
+    "tubing_outerDiameters": [1, 4.5],
+    "tubing_jointCounts": [30, 700]
+  }],
+  "bha": [{
+    "pump_distance": [0, 20000],
+    "pump_depth": [0, 20000],
+    "": "????????????????????????????"
+  }],
+  "vfd": [{
+    "peakWorkingSpeed": [0, 120],
+    "minWorkingSpeed": [0, 120],
+    "speedIncrease": [0, 10],
+    "speedDecrease": [0, 10],
+    "startUpSpeed": [0, 120],
+    "deadBand": [0, 100],
+    "deadBandStrokes": [0, 1000],
+    "constantSpeed": [0, 120],
+    "inverterRatedPower": [1, 500],
+    "motorRatedPower": [1, 500]
+  }]
+}]
