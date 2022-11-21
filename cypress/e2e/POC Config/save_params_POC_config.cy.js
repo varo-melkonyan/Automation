@@ -77,6 +77,7 @@ describe('POC Configuration', () => {
             cy.get('#saveControl').click();
             cy.wait(3000);
             cy.reload();
+            // cy.get('.mat-radio-checked').contains('GreenShot or Well manager');
             cy.get('.mat-input-element').then(async () => {
                 if (range === 0) {
                     await getValues(range, firstChange);

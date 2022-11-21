@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="63d827f2-5f2c-409d-9c8f-6ea0617115b4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Control setup/save_params_CS.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Control setup/save_params_CS.cy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cypress/e2e/POC Config/save_params_POC_config.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/POC Config/save_params_POC_config.cy.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +49,8 @@
       <workItem from="1668960696434" duration="730000" />
       <workItem from="1668974550571" duration="5282000" />
       <workItem from="1669008133900" duration="1918000" />
+      <workItem from="1669011623286" duration="141000" />
+      <workItem from="1669013423281" duration="168000" />
     </task>
     <servers />
   </component>
