@@ -1,8 +1,8 @@
 describe('Malfunction setup', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "Test123";                         //Well name
-    const controlMode = ["Fillage", "PIP", "Timer, On/Off", "Host"];
+    const wellName = "TestWell";                         //Well name
+    const controlMode = ["Default", "Custom"];
     let currentMode = 0;
 
     let firstChange = {};
@@ -22,14 +22,11 @@ describe('Malfunction setup', () => {
             cy.wait(1000);
             cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
             cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-            controlSetupCommands();
+            malfunctionSetupCommands();
         }
 
-        async function controlSetupCommands() {
+        async function malfunctionSetupCommands() {
             cy.get('body').then(async () => {
-                // ControlMode
-                await cy.get('.mat-select').eq(0).click();
-                await cy.get('.mat-option-text').contains(controlMode[currentMode]).click();
                 await changeValues(0);
                 await cy.wait(2000);
                 await changeValues(1);
@@ -39,218 +36,48 @@ describe('Malfunction setup', () => {
 
         //change parameters
         async function changeValues(range) {
+            range = 0
+            await setCustomMalf();
             await cy.get('.mat-input-element').then(() => {
-                let valuesFillage = Object.values(data[0][0].fillage);
-                let valuesPip = Object.values(data[0][0].pip);
-                let valuesDynagraph = Object.values(data[0][1].dynagraph);
-                let valuesVfd = Object.values(data[0][2].vfd);
-                let valuesVfdSpeedZone = Object.values(data[0][3].vfdSpeedZone);
+                let valuesMaximumLoad = Object.values(data[0][0].Maximum_Load);
+                let valuesMinimum_Load = Object.values(data[0][0].Minimum_Load);
+                let valuesMalfunction_Point = Object.values(data[0][0].Malfunction_Point);
+                let valuesLow_Fluid_Load = Object.values(data[0][0].Low_Fluid_Load);
+                let valuesCustom_Malfuntion = Object.values(data[0][1].Custom_Malfuntion);
 
-                if (controlMode[currentMode] === "Fillage") {
-                    console.log(controlMode[currentMode]);
-                    cy.get('.mat-select').eq(1).click().type('1').type('{enter}');
-                    cy.get('.mat-select').eq(2).click().type('01').type('{enter}');
-                    cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
+                if (controlMode[currentMode] === "Default") {
+                    cy.get('.mat-checkbox-input').as('checkboxes').check({force: true})
+                    cy.get('.mat-checkbox-input').as('checkboxes')
                         .invoke('val', 'aria-checked')
                         .then((e) => {
                             if (e[0].checked) {
-                                cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
-                                    .invoke('val', 'aria-checked')
-                                    .then(async (e) => {
-                                        if (e[0].checked) {
-                                            cy.get('[formgroupname="zoneControl"] .mat-checkbox-layout').click();
-                                        }
-                                    });
-                                cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-label').click();
-                            }
-                        });
-                    cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (e[0].checked) {
-                                for (let i = 0; i < valuesFillage.length; i++) {
+                                for (let i = 0; i < valuesMaximumLoad.length; i++) {
                                     cy.get('.mat-input-element').eq(i)
-                                        .clear().type(valuesFillage[i][range]);
+                                        .clear().type(valuesMaximumLoad[i][range]);
                                 }
-                                for (let j = 0; j < valuesDynagraph.length; j++) {
-                                    cy.get('.mat-input-element').eq(valuesFillage.length + j)
-                                        .clear().type(valuesDynagraph[j][range]);
+                                for (let j = 0; j < valuesMinimum_Load.length; j++) {
+                                    cy.get('.mat-input-element').eq(valuesMaximumLoad.length + j)
+                                        .clear().type(valuesMinimum_Load[j][range]);
                                 }
-                                for (let k = 0; k < valuesVfd.length; k++) {
-                                    cy.get('.mat-input-element').eq(valuesDynagraph.length + valuesFillage.length + k)
-                                        .clear().type(valuesVfd[k][range]);
+                                for (let k = 0; k < valuesMalfunction_Point.length; k++) {
+                                    cy.get('.mat-input-element').eq(valuesMinimum_Load.length + valuesMaximumLoad.length + k)
+                                        .clear().type(valuesMalfunction_Point[k][range]);
                                 }
-                                cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
-                                    .invoke('val', 'aria-checked')
-                                    .then(async (e) => {
-                                        if (e[0].checked) {
-                                            valuesVfdSpeedZone = Object.values(valuesVfdSpeedZone[0]);
-                                            for (let q = 0; q < valuesVfdSpeedZone.length; q++) {
-                                                cy.get('.mat-input-element')
-                                                    .eq(valuesFillage.length + valuesDynagraph.length + valuesVfd.length + q)
-                                                    .clear().type(valuesVfdSpeedZone[q][range]);
-                                            }
-                                        }
-                                    })
+                                for (let h = 0; h < valuesLow_Fluid_Load.length; h++) {
+                                    cy.get('.mat-input-element').eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + h)
+                                        .clear().type(valuesLow_Fluid_Load[h][range]);
+                                }
                             } else {
-                                for (let i = 0; i < valuesFillage.length - 1; i++) {
-                                    cy.get('.mat-input-element').eq(i).clear().type(valuesFillage[i][range]);
-                                }
-                                for (let j = 0; j < valuesDynagraph.length; j++) {
-                                    cy.get('.mat-input-element').eq(valuesFillage.length - 1 + j).clear().type(valuesDynagraph[j][range]);
-                                }
-                            }
-                        });
-                } else if (controlMode[currentMode] === "PIP") {
-                    console.log(controlMode[currentMode]);
-                    cy.get('.mat-select').eq(1).click().type('1').type('{enter}');
-                    cy.get('.mat-select').eq(2).click().type('01').type('{enter}');
-                    cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (!e[0].checked) {
-                                cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-label').click();
-                                cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
-                                    .invoke('val', 'aria-checked')
-                                    .then(async (e) => {
-                                        if (e[0].checked) {
-                                            cy.get('[formgroupname="zoneControl"] .mat-checkbox-layout').click();
-                                        }
-                                    });
-                            } else {
-                                cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
-                                    .invoke('val', 'aria-checked')
-                                    .then(async (e) => {
-                                        if (e[0].checked) {
-                                            cy.get('[formgroupname="zoneControl"] .mat-checkbox-layout').click();
-                                        }
-                                    });
-                            }
-                        });
-                    cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (e[0].checked) {
-                                for (let i = 0; i < valuesPip.length; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(valuesPip[i][range]);
-                                }
-                                for (let j = 0; j < valuesDynagraph.length; j++) {
-                                    cy.get('.mat-input-element').eq(valuesPip.length + j)
-                                        .clear().type(valuesDynagraph[j][range]);
-                                }
-                                for (let k = 0; k < valuesVfd.length; k++) {
-                                    cy.get('.mat-input-element').eq(valuesDynagraph.length + valuesPip.length + k)
-                                        .clear().type(valuesVfd[k][range]);
-                                }
-                                cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
-                                    .invoke('val', 'aria-checked')
-                                    .then(async (e) => {
-                                        if (e[0].checked) {
-                                            valuesVfdSpeedZone = Object.values(valuesVfdSpeedZone[0]);
-                                            for (let q = 0; q < valuesVfdSpeedZone.length; q++) {
-                                                cy.get('.mat-input-element')
-                                                    .eq(valuesPip.length + valuesDynagraph.length + valuesVfd.length + q)
-                                                    .clear().type(valuesVfdSpeedZone[q][range]);
-                                            }
-                                        }
-                                    })
-                            } else {
-                                for (let i = 0; i < valuesPip.length - 1; i++) {
-                                    cy.get('.mat-input-element').eq(i).clear().type(valuesPip[i][range]);
-                                }
-                                for (let j = 0; j < valuesDynagraph.length; j++) {
-                                    cy.get('.mat-input-element').eq(valuesPip.length - 1 + j).clear().type(valuesDynagraph[j][range]);
-                                }
-                            }
-                        });
-                } else if (controlMode[currentMode] === "Timer, On/Off") {
-                    cy.get('[formgroupname="zoneControl"] .mat-checkbox-input').invoke('val', 'aria-checked').then(async (e) => {
-                        if (!e[0].checked) {
-                            cy.get('[formgroupname="zoneControl"] .mat-checkbox-layout').click();
-                        }
-                    });
-                    cy.get('[formgroupname="zoneControl"] .mat-checkbox-input').invoke('val', 'aria-checked').then(async (e) => {
-                        if (e[0].checked) {
-                            console.log(controlMode[currentMode]);
-                            cy.get('.mat-select').eq(1).click().type('1').type('{enter}');
-                            cy.get('.mat-select').eq(2).click().type('01').type('{enter}');
-                            //Off time
-                            cy.get('.mat-select').eq(3).click().type('1').type('{enter}');
-                            cy.get('.mat-select').eq(4).click().type('01').type('{enter}');
-
-                            cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                                .invoke('val', 'aria-checked')
-                                .then((e) => {
-                                    if (e[0].checked) {
-                                        for (let j = 0; j < valuesDynagraph.length; j++) {
-                                            cy.get('.mat-input-element').eq(j)
-                                                .clear().type(valuesDynagraph[j][range]);
-                                        }
-                                        for (let k = 0; k < valuesVfd.length; k++) {
-                                            cy.get('.mat-input-element').eq(valuesDynagraph.length + k)
-                                                .clear().type(valuesVfd[k][range]);
-                                        }
-                                        cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
-                                            .invoke('val', 'aria-checked')
-                                            .then(async (e) => {
-                                                if (e[0].checked) {
-                                                    valuesVfdSpeedZone = Object.values(valuesVfdSpeedZone[0]);
-                                                    for (let q = 0; q < valuesVfdSpeedZone.length; q++) {
-                                                        cy.get('.mat-input-element')
-                                                            .eq(valuesDynagraph.length + valuesVfd.length + q)
-                                                            .clear().type(valuesVfdSpeedZone[q][range]);
-                                                    }
-                                                }
-                                            })
-                                    } else {
-                                        for (let j = 0; j < valuesDynagraph.length; j++) {
-                                            cy.get('.mat-input-element').eq(j).clear().type(valuesDynagraph[j][range]);
-                                        }
-                                    }
-                                });
-                        }
-                    });
-
-                } else {
-                    console.log("Host Mode");
-                    cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (e[0].checked) {
-                                for (let j = 0; j < valuesDynagraph.length; j++) {
-                                    cy.get('.mat-input-element').eq(j)
-                                        .clear().type(valuesDynagraph[j][range]);
-                                }
-                                for (let k = 0; k < valuesVfd.length; k++) {
-                                    cy.get('.mat-input-element').eq(valuesDynagraph.length + k)
-                                        .clear().type(valuesVfd[k][range]);
-                                }
-                                cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
-                                    .invoke('val', 'aria-checked')
-                                    .then(async (e) => {
-                                        if (e[0].checked) {
-                                            cy.get('.mat-select').eq(1).click();
-                                            cy.get('.mat-option-text').contains("in").click();
-                                            cy.get('.mat-select').eq(2).click();
-                                            cy.get('.mat-option-text').contains("Hz").click();
-                                            valuesVfdSpeedZone = Object.values(valuesVfdSpeedZone[1]);
-                                            for (let q = 0; q < valuesVfdSpeedZone.length; q++) {
-                                                cy.get('.mat-input-element')
-                                                    .eq(valuesDynagraph.length + valuesVfd.length + q)
-                                                    .clear().type(valuesVfdSpeedZone[q][range]);
-                                            }
-                                        }
-                                    })
-                            } else {
-                                for (let j = 0; j < valuesDynagraph.length; j++) {
-                                    cy.get('.mat-input-element').eq(j).clear().type(valuesDynagraph[j][range]);
+                                for (let i = 0; i < valuesCustom_Malfuntion.length - 1; i++) {
+                                    cy.get('.mat-input-element')
+                                        .eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + valuesLow_Fluid_Load.length)
+                                        .clear().type(valuesCustom_Malfuntion[i][range]);
                                 }
                             }
                         });
                 }
             });
-            cy.get('#saveControl').click();
+            cy.get('#saveMalf').click();
             cy.wait(3000);
             cy.reload();
             cy.get('.mat-input-element').then(async () => {
@@ -263,6 +90,21 @@ describe('Malfunction setup', () => {
             });
         }
 
+        async function setCustomMalf() {
+            await cy.get('.sis-tabs__item').contains('I/O').click();
+            await cy.get('.sys-accordion__header').eq(1).contains(' + Add New ').click();
+            await cy.get('.mat-checkbox-input').check({force: true});
+            await cy.get('input[formcontrolname="name"]').clear().type("Custom Analog");
+            await cy.get('.mat-select').eq(0).click().get('.mat-option').contains("Module SYNC 1").click();
+            await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("AO 01").click();
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("0-10V").click();
+            await cy.get('.mat-select').eq(3).click().get('.mat-option').contains("Hz").click();
+            await cy.get('input[formcontrolname="y1"]').clear().type(0);
+            await cy.get('input[formcontrolname="y2"]').clear().type(60);
+            await cy.get('.io-add-malf').click();
+
+            cy.pause();
+        }
         //check values
         async function checkValues() {
             for (let i = 0; i < Object.values(firstChange).length; i++) {
@@ -280,7 +122,7 @@ describe('Malfunction setup', () => {
                 firstChange = {};
                 secondChange = {};
                 currentMode += 1;
-                await controlSetupCommands();
+                await malfunctionSetupCommands();
             } else {
                 alert("Finish")
             }
