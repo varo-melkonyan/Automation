@@ -1,0 +1,40 @@
+[{
+  "Maximum Load": {
+    "violation_Set_Point": [0, 31020],
+    "violation": [1, 6],
+    "retries": [0, 1],
+    "retries_Time_hr": [0, 24],
+    "retries_Time_hr": [1, 60]
+  },
+  "Minimum Load": {
+    "violation_Set_Point": [0, 11020],
+    "violation": [2, 7],
+    "retries": [1, 4],
+    "retries_Time_hr": [0, 24],
+    "retries_Time_hr": [1, 60]
+  },
+  "Malfunction Point": {
+    "load": [0, 31020],
+    "position": [3, 5555],
+    "violation": [1, 6],
+    "retries": [0, 1],
+    "retries_Time_hr": [0, 24],
+    "retries_Time_hr": [1, 60]
+    },
+  "Low Fluid Load": {
+    "violation_Set_Point": [0, 31020],
+    "violation": [1, 6],
+    "retries": [0, 1],
+    "retries_Time_hr": [0, 24],
+    "retries_Time_hr": [1, 60]
+  }
+},
+{
+  "Custom Malfuntion": {
+    "violation_Set_Point": [0, 31020],
+    "violation": [1, 6],
+    "retries": [0, 1],
+    "retries_Time_hr": [0, 24],
+    "retries_Time_hr": [1, 60]
+  }
+}]

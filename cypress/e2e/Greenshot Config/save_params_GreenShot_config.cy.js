@@ -1,4 +1,4 @@
-describe('POC Configuration', () => {
+describe('GreenShot Configuration', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "Test123";                         //Well name
@@ -11,7 +11,7 @@ describe('POC Configuration', () => {
     it('POC config parameters', () => {
         let data = [];
         // get data
-        cy.fixture('../e2e/POC Config/assets/data_Well_config')
+        cy.fixture('../e2e/Greenshot Config/assets/data_GreenShot_config')
             .then(async (e) => {
                 data.push(e);
             });
@@ -21,7 +21,7 @@ describe('POC Configuration', () => {
             cy.get('.well-list__group').contains(wellName).click();
             cy.wait(1000);
             cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
-            cy.get('.sis-tabs__item').contains('Configuration').click();
+            cy.get('.sis-tabs__item').contains('System Parameters').click();
             configurationCommands();
         }
 
