@@ -267,12 +267,13 @@ describe('Control setup', () => {
         async function checkValues() {
             for (let i = 0; i < Object.values(firstChange).length; i++) {
                 if (Object.values(firstChange)[i] === Object.values(secondChange)[i]) {
-                    console.log(Object.values(firstChange));
-                    console.log(Object.values(secondChange));
-                    console.log(Object.values(secondChange)[i]);
-                    console.log(i)
+                    console.log(Object.values(firstChange), "Default values");
+                    console.log(Object.values(secondChange), "Changed values");
+                    console.log(Object.values(secondChange)[i], "Input value");
+                    console.log(i, "Index value");
                     cy.pause();
                 }
+
             }
 
             if (currentMode < controlMode.length - 1) {
