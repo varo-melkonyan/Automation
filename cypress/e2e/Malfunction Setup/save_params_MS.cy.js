@@ -169,13 +169,12 @@ describe('Malfunction setup', () => {
             }
 
             if (currentMode < controlMode.length - 1) {
-                console.log(currentMode)
-                console.log(controlMode.length)
                 firstChange = {};
                 secondChange = {};
                 currentMode += 1;
                 await malfunctionSetupCommands();
             } else {
+                cy.pause();
                 alert("Finish")
             }
         }
