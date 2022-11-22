@@ -165,7 +165,6 @@ describe('Malfunction setup', () => {
                     console.log(i, "Index value");
                     cy.pause();
                 }
-
             }
 
             if (currentMode < controlMode.length - 1) {
