@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="63d827f2-5f2c-409d-9c8f-6ea0617115b4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cypress/e2e/Malfunction Setup/assets/data_MS.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Malfunction Setup/assets/data_MS.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cypress/e2e/Malfunction Setup/save_params_MS.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Malfunction Setup/save_params_MS.cy.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,6 +60,7 @@
       <workItem from="1669013423281" duration="5889000" />
       <workItem from="1669059878650" duration="5406000" />
       <workItem from="1669095074505" duration="4641000" />
+      <workItem from="1669100472044" duration="6041000" />
     </task>
     <servers />
   </component>

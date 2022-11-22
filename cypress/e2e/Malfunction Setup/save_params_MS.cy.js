@@ -45,7 +45,7 @@ describe('Malfunction setup', () => {
                 let valuesCustom_Malfuntion = Object.values(data[0][1].Custom_Malfuntion);
 
                 if (controlMode[currentMode] === "Default") {
-                    cy.get('.mat-checkbox-input').as('checkboxes').check({force: true})
+                    cy.get('.mat-checkbox-input').as('checkboxes').check({force: true});
                     cy.get('.mat-checkbox-input').as('checkboxes').then(async (e) => {
                         if (e.length <= defaultMalfunctionCount) {
                             for (let i = 0; i < valuesMaximumLoad.length; i++) {
@@ -66,13 +66,36 @@ describe('Malfunction setup', () => {
                             }
                         }
                     });
-                } else if (controlMode[currentMode] === "Custom"){
-                    cy.get('.mat-input-element').then(async () => await setCustomMalf());
-                    for (let i = 0; i < valuesCustom_Malfuntion.length - 1; i++) {
-                        cy.get('.mat-input-element')
-                            .eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + valuesLow_Fluid_Load.length)
-                            .clear().type(valuesCustom_Malfuntion[i][range]);
-                    }
+                } else if (controlMode[currentMode] === "Custom") {
+                    cy.get('.mat-input-element').then(async () => {
+                        if (range === 0) {
+                            await setCustomMalf();
+                        }
+                    });
+                    cy.wait(2000);
+                    cy.get('.mat-input-element').then(async () => {
+                        for (let i = 0; i < valuesMaximumLoad.length; i++) {
+                            cy.get('.mat-input-element').eq(i)
+                                .clear().type(valuesMaximumLoad[i][range]);
+                        }
+                        for (let j = 0; j < valuesMinimum_Load.length; j++) {
+                            cy.get('.mat-input-element').eq(valuesMaximumLoad.length + j)
+                                .clear().type(valuesMinimum_Load[j][range]);
+                        }
+                        for (let k = 0; k < valuesMalfunction_Point.length; k++) {
+                            cy.get('.mat-input-element').eq(valuesMinimum_Load.length + valuesMaximumLoad.length + k)
+                                .clear().type(valuesMalfunction_Point[k][range]);
+                        }
+                        for (let h = 0; h < valuesLow_Fluid_Load.length; h++) {
+                            cy.get('.mat-input-element').eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + h)
+                                .clear().type(valuesLow_Fluid_Load[h][range]);
+                        }
+                        for (let w = 0; w < valuesCustom_Malfuntion.length; w++) {
+                            cy.get('.mat-input-element')
+                                .eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + valuesLow_Fluid_Load.length + w)
+                                .clear().type(valuesCustom_Malfuntion[w][range]);
+                        }
+                    });
                 }
             });
             cy.get('#saveMalf').click();
@@ -111,7 +134,7 @@ describe('Malfunction setup', () => {
             await cy.get('.mat-input-element').eq(7).clear().type(1);
             await cy.get('.mat-flat-button').eq(1).click();
 
-            await cy.wait(1000);
+            await cy.wait(2000);
 
             //add new custom digital
             await cy.get('.sys-accordion__header').eq(2).contains(' + Add New ').click();
@@ -126,6 +149,10 @@ describe('Malfunction setup', () => {
             await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(3);
             await cy.get('.mat-input-element').eq(4).clear().type(1);
             await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.wait(2000);
+
+            await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
         }
 
         //check values
@@ -142,6 +169,8 @@ describe('Malfunction setup', () => {
             }
 
             if (currentMode < controlMode.length - 1) {
+                console.log(currentMode)
+                console.log(controlMode.length)
                 firstChange = {};
                 secondChange = {};
                 currentMode += 1;

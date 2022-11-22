@@ -31,10 +31,15 @@
 },
 {
   "Custom_Malfuntion": {
-    "violation_Set_Point": [0, 31020],
-    "violation": [1, 6],
-    "retries": [0, 1],
-    "retries_Time_hr": [0, 24],
-    "retries_Time_min": [1, 60]
+    "violation_Set_PointAN": [0, 31020],
+    "violationAN": [1, 6],
+    "retriesAN": [0, 1],
+    "retries_Time_hrAN": [0, 24],
+    "retries_Time_minAN": [1, 60],
+    "violation_Set_PointDI": [0, 31020],
+    "violationDI": [1, 6],
+    "retriesDI": [0, 1],
+    "retries_Time_hrDI": [0, 24],
+    "retries_Time_minDI": [1, 60]
   }
 }]
