@@ -37,7 +37,6 @@ describe('Malfunction setup', () => {
         //change parameters
         async function changeValues(range) {
             range = 0
-            await setCustomMalf();
             await cy.get('.mat-input-element').then(() => {
                 let valuesMaximumLoad = Object.values(data[0][0].Maximum_Load);
                 let valuesMinimum_Load = Object.values(data[0][0].Minimum_Load);
@@ -49,7 +48,7 @@ describe('Malfunction setup', () => {
                     cy.get('.mat-checkbox-input').as('checkboxes').check({force: true})
                     cy.get('.mat-checkbox-input').as('checkboxes')
                         .invoke('val', 'aria-checked')
-                        .then((e) => {
+                        .then(async (e) => {
                             if (e[0].checked) {
                                 for (let i = 0; i < valuesMaximumLoad.length; i++) {
                                     cy.get('.mat-input-element').eq(i)
@@ -68,6 +67,7 @@ describe('Malfunction setup', () => {
                                         .clear().type(valuesLow_Fluid_Load[h][range]);
                                 }
                             } else {
+                                await setCustomMalf();
                                 for (let i = 0; i < valuesCustom_Malfuntion.length - 1; i++) {
                                     cy.get('.mat-input-element')
                                         .eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + valuesLow_Fluid_Load.length)
@@ -92,6 +92,8 @@ describe('Malfunction setup', () => {
 
         async function setCustomMalf() {
             await cy.get('.sis-tabs__item').contains('I/O').click();
+
+            //add new custom analog
             await cy.get('.sys-accordion__header').eq(1).contains(' + Add New ').click();
             await cy.get('.mat-checkbox-input').check({force: true});
             await cy.get('input[formcontrolname="name"]').clear().type("Custom Analog");
@@ -102,9 +104,31 @@ describe('Malfunction setup', () => {
             await cy.get('input[formcontrolname="y1"]').clear().type(0);
             await cy.get('input[formcontrolname="y2"]').clear().type(60);
             await cy.get('.io-add-malf').click();
+            await cy.get('.mat-checkbox-input').eq(1).check({force: true});
+            await cy.get('.mat-select').eq(4).click().get('.mat-option').contains("Min").click();
+            await cy.get('input[formcontrolname="value"]').clear().type(20);
+            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(2);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(4);
+            await cy.get('.mat-input-element').eq(7).clear().type(1);
+            await cy.get('.mat-flat-button').eq(1).click();
 
-            cy.pause();
+            await cy.wait(1000);
+
+            //add new custom digital
+            await cy.get('.sys-accordion__header').eq(2).contains(' + Add New ').click();
+            await cy.get('.mat-checkbox-input').check({force: true});
+            await cy.get('input[formcontrolname="name"]').clear().type("Custom Digital");
+            await cy.get('.mat-select').eq(0).click().get('.mat-option').contains("Module 8DI/8DO").click();
+            await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("DO 04").click();
+            await cy.get('.io-add-malf').click();
+            await cy.get('.mat-checkbox-input').eq(1).check({force: true});
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("True (closed)").click();
+            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(1);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(3);
+            await cy.get('.mat-input-element').eq(4).clear().type(1);
+            await cy.get('.mat-flat-button').eq(1).click();
         }
+
         //check values
         async function checkValues() {
             for (let i = 0; i < Object.values(firstChange).length; i++) {
