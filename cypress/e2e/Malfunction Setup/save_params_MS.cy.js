@@ -4,6 +4,7 @@ describe('Malfunction setup', () => {
     const wellName = "TestWell";                         //Well name
     const controlMode = ["Default", "Custom"];
     let currentMode = 0;
+    let defaultMalfunctionCount = 4;
 
     let firstChange = {};
     let secondChange = {};
@@ -36,7 +37,6 @@ describe('Malfunction setup', () => {
 
         //change parameters
         async function changeValues(range) {
-            range = 0
             await cy.get('.mat-input-element').then(() => {
                 let valuesMaximumLoad = Object.values(data[0][0].Maximum_Load);
                 let valuesMinimum_Load = Object.values(data[0][0].Minimum_Load);
@@ -46,35 +46,33 @@ describe('Malfunction setup', () => {
 
                 if (controlMode[currentMode] === "Default") {
                     cy.get('.mat-checkbox-input').as('checkboxes').check({force: true})
-                    cy.get('.mat-checkbox-input').as('checkboxes')
-                        .invoke('val', 'aria-checked')
-                        .then(async (e) => {
-                            if (e[0].checked) {
-                                for (let i = 0; i < valuesMaximumLoad.length; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(valuesMaximumLoad[i][range]);
-                                }
-                                for (let j = 0; j < valuesMinimum_Load.length; j++) {
-                                    cy.get('.mat-input-element').eq(valuesMaximumLoad.length + j)
-                                        .clear().type(valuesMinimum_Load[j][range]);
-                                }
-                                for (let k = 0; k < valuesMalfunction_Point.length; k++) {
-                                    cy.get('.mat-input-element').eq(valuesMinimum_Load.length + valuesMaximumLoad.length + k)
-                                        .clear().type(valuesMalfunction_Point[k][range]);
-                                }
-                                for (let h = 0; h < valuesLow_Fluid_Load.length; h++) {
-                                    cy.get('.mat-input-element').eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + h)
-                                        .clear().type(valuesLow_Fluid_Load[h][range]);
-                                }
-                            } else {
-                                await setCustomMalf();
-                                for (let i = 0; i < valuesCustom_Malfuntion.length - 1; i++) {
-                                    cy.get('.mat-input-element')
-                                        .eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + valuesLow_Fluid_Load.length)
-                                        .clear().type(valuesCustom_Malfuntion[i][range]);
-                                }
+                    cy.get('.mat-checkbox-input').as('checkboxes').then(async (e) => {
+                        if (e.length <= defaultMalfunctionCount) {
+                            for (let i = 0; i < valuesMaximumLoad.length; i++) {
+                                cy.get('.mat-input-element').eq(i)
+                                    .clear().type(valuesMaximumLoad[i][range]);
                             }
-                        });
+                            for (let j = 0; j < valuesMinimum_Load.length; j++) {
+                                cy.get('.mat-input-element').eq(valuesMaximumLoad.length + j)
+                                    .clear().type(valuesMinimum_Load[j][range]);
+                            }
+                            for (let k = 0; k < valuesMalfunction_Point.length; k++) {
+                                cy.get('.mat-input-element').eq(valuesMinimum_Load.length + valuesMaximumLoad.length + k)
+                                    .clear().type(valuesMalfunction_Point[k][range]);
+                            }
+                            for (let h = 0; h < valuesLow_Fluid_Load.length; h++) {
+                                cy.get('.mat-input-element').eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + h)
+                                    .clear().type(valuesLow_Fluid_Load[h][range]);
+                            }
+                        }
+                    });
+                } else if (controlMode[currentMode] === "Custom"){
+                    cy.get('.mat-input-element').then(async () => await setCustomMalf());
+                    for (let i = 0; i < valuesCustom_Malfuntion.length - 1; i++) {
+                        cy.get('.mat-input-element')
+                            .eq(valuesMinimum_Load.length + valuesMaximumLoad.length + valuesMalfunction_Point.length + valuesLow_Fluid_Load.length)
+                            .clear().type(valuesCustom_Malfuntion[i][range]);
+                    }
                 }
             });
             cy.get('#saveMalf').click();
@@ -91,6 +89,7 @@ describe('Malfunction setup', () => {
         }
 
         async function setCustomMalf() {
+            await cy.get('.mat-checkbox-input').as('checkboxes').check({force: true})
             await cy.get('.sis-tabs__item').contains('I/O').click();
 
             //add new custom analog
@@ -154,99 +153,47 @@ describe('Malfunction setup', () => {
 
         // control setup inputs values
         async function getValues(range, changedObj) {
-            await cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                .invoke('val', 'aria-checked')
-                .then(async (e) => {
-                    if (e[0].checked) {
-                        await vfdOn(changedObj);
-                    } else {
-                        await vfdOff(changedObj);
-                    }
-                });
-            await cy.get('input[formcontrolname="fluidFrictionRatio"]').then(async () => {
+            await cy.get('.mat-input-element').eq(0).then((e) => changedObj.maxPoint = e[0].value);
+            await cy.get('.mat-input-element').eq(1).then((e) => changedObj.maxViolation = e[0].value);
+            await cy.get('.mat-input-element').eq(2).then((e) => changedObj.maxRetries = e[0].value);
+            await cy.get('.mat-input-element').eq(3).then((e) => changedObj.maxRetriesTimeHR = e[0].value);
+            await cy.get('.mat-input-element').eq(4).then((e) => changedObj.maxRetriesTimeMin = e[0].value);
+            await cy.get('.mat-input-element').eq(5).then((e) => changedObj.minPoint = e[0].value);
+            await cy.get('.mat-input-element').eq(6).then((e) => changedObj.minViolation = e[0].value);
+            await cy.get('.mat-input-element').eq(7).then((e) => changedObj.minRetries = e[0].value);
+            await cy.get('.mat-input-element').eq(8).then((e) => changedObj.minRetriesTimeHR = e[0].value);
+            await cy.get('.mat-input-element').eq(9).then((e) => changedObj.minRetriesTimeMin = e[0].value);
+            await cy.get('.mat-input-element').eq(10).then((e) => changedObj.malfPointLoad = e[0].value);
+            await cy.get('.mat-input-element').eq(11).then((e) => changedObj.malfPointPos = e[0].value);
+            await cy.get('.mat-input-element').eq(11).then((e) => changedObj.malfPointViolation = e[0].value);
+            await cy.get('.mat-input-element').eq(12).then((e) => changedObj.malfPointRetries = e[0].value);
+            await cy.get('.mat-input-element').eq(13).then((e) => changedObj.malfPointRetriesTimeHR = e[0].value);
+            await cy.get('.mat-input-element').eq(14).then((e) => changedObj.malfPointRetriesTimeMin = e[0].value);
+            await cy.get('.mat-input-element').eq(15).then((e) => changedObj.lowFluidPoint = e[0].value);
+            await cy.get('.mat-input-element').eq(16).then((e) => changedObj.lowFluidViolation = e[0].value);
+            await cy.get('.mat-input-element').eq(17).then((e) => changedObj.lowFluidRetries = e[0].value);
+            await cy.get('.mat-input-element').eq(18).then((e) => changedObj.lowFluidRetriesTimeHR = e[0].value);
+            await cy.get('.mat-input-element').eq(19).then((e) => changedObj.lowFluidRetriesTimeMin = e[0].value);
+
+            await cy.get('.mat-checkbox-input').as('checkboxes').then(async (e) => {
+                if (e.length > defaultMalfunctionCount) {
+                    await cy.get('.mat-input-element').eq(20).then((e) => changedObj.customAnPoint = e[0].value);
+                    await cy.get('.mat-input-element').eq(21).then((e) => changedObj.customAnViolation = e[0].value);
+                    await cy.get('.mat-input-element').eq(22).then((e) => changedObj.customAnRetries = e[0].value);
+                    await cy.get('.mat-input-element').eq(23).then((e) => changedObj.customAnRetriesTimeHR = e[0].value);
+                    await cy.get('.mat-input-element').eq(24).then((e) => changedObj.customAnRetriesTimeMin = e[0].value);
+                    await cy.get('.mat-input-element').eq(25).then((e) => changedObj.customDiPoint = e[0].value);
+                    await cy.get('.mat-input-element').eq(26).then((e) => changedObj.customDiViolation = e[0].value);
+                    await cy.get('.mat-input-element').eq(27).then((e) => changedObj.customDiRetries = e[0].value);
+                    await cy.get('.mat-input-element').eq(28).then((e) => changedObj.customDiRetriesTimeHR = e[0].value);
+                    await cy.get('.mat-input-element').eq(29).then((e) => changedObj.customDiRetriesTimeMin = e[0].value);
+                }
+            });
+            await cy.get('.mat-checkbox-input').as('checkboxes').then(async () => {
                 if (range === 1) {
                     await checkValues();
                 }
             });
-        }
-
-        async function vfdOn(changedObj) {
-            if (controlMode[currentMode] === "Fillage") {
-                await fillageMode(changedObj);
-            } else if (controlMode[currentMode] === "PIP") {
-                await pipMode(changedObj);
-            } else {
-                console.log(controlMode[currentMode]);
-            }
-            // Dynagraph Card Settings
-            await cy.get('input[formcontrolname="fillBaseRatio"]').then((e) => changedObj.fillbase = e[0].value);
-            await cy.get('input[formcontrolname="fluidDampingCoefficient"]').then((e) => changedObj.dampingFactor = e[0].value);
-            await cy.get('input[formcontrolname="fluidFrictionRatio"]').then((e) => changedObj.mechanicalFriction = e[0].value);
-            // VFD inputs values
-            await cy.get('input[formcontrolname="speedMax"]').then((e) => changedObj.peakWorkingSpeed = e[0].value);
-            await cy.get('input[formcontrolname="speedMin"]').then((e) => changedObj.minWorkingSpeed = e[0].value);
-            await cy.get('input[formcontrolname="speedIncrease"]').then((e) => changedObj.speedIncrease = e[0].value);
-            await cy.get('input[formcontrolname="speedDecrease"]').then((e) => changedObj.speedDecrease = e[0].value);
-            await cy.get('input[formcontrolname="startupSpeed"]').then((e) => changedObj.startUpSpeed = e[0].value);
-            await cy.get('input[formcontrolname="deadBandRate"]').then((e) => changedObj.deadBand = e[0].value);
-            await cy.get('input[formcontrolname="deadBandTicks"]').then((e) => changedObj.deadBandStrokes = e[0].value);
-            await cy.get('input[formcontrolname="constantSpeed"]').then((e) => changedObj.constantSpeed = e[0].value);
-            await cy.get('input[formcontrolname="inverterRatedPower"]').then((e) => changedObj.inverterRatedPower = e[0].value);
-            await cy.get('input[formcontrolname="motorRatedPower"]').then((e) => changedObj.motorRatedPower = e[0].value);
-            // VFD Speed Zones
-            await cy.get('[formgroupname="zoneControl"] .mat-checkbox-input').invoke('val', 'aria-checked').then(async (e) => {
-                if (e[0].checked) {
-                    await cy.get('input[formcontrolname="posnRate"]').eq(0).then((e) => changedObj.vfdSpeedZonePositionFirst = e[0].value);
-                    await cy.get('input[formcontrolname="posnRate"]').eq(1).then((e) => changedObj.vfdSpeedZonePositionSecond = e[0].value);
-                    await cy.get('input[formcontrolname="posnRate"]').eq(2).then((e) => changedObj.vfdSpeedZonePositionThird = e[0].value);
-                    await cy.get('input[formcontrolname="posnRate"]').eq(3).then((e) => changedObj.vfdSpeedZonePositionFourth = e[0].value);
-                    await cy.get('input[formcontrolname="speedRate"]').eq(0).then((e) => changedObj.vfdSpeedZoneSpeedFirst = e[0].value);
-                    await cy.get('input[formcontrolname="speedRate"]').eq(1).then((e) => changedObj.vfdSpeedZoneSpeedSecond = e[0].value);
-                    await cy.get('input[formcontrolname="speedRate"]').eq(2).then((e) => changedObj.vfdSpeedZoneSpeedThird = e[0].value);
-                    await cy.get('input[formcontrolname="speedRate"]').eq(3).then((e) => changedObj.vfdSpeedZoneSpeedFourth = e[0].value);
-                }
-            });
-        }
-
-        async function vfdOff(changedObj) {
-            if (controlMode[currentMode] === "Fillage") {
-                await fillageMode(changedObj);
-            } else if (controlMode[currentMode] === "PIP") {
-                await pipMode(changedObj);
-            } else {
-                console.log(controlMode[currentMode]);
-            }
-            // Dynagraph Card Settings
-            await cy.get('input[formcontrolname="fillBaseRatio"]').then((e) => changedObj.fillbase = e[0].value);
-            await cy.get('input[formcontrolname="fluidDampingCoefficient"]').then((e) => changedObj.dampingFactor = e[0].value);
-            await cy.get('input[formcontrolname="fluidFrictionRatio"]').then((e) => changedObj.mechanicalFriction = e[0].value);
-        }
-
-        // Fillage inputs values
-        async function fillageMode(changedObj) {
-            await cy.get('input[formcontrolname="threshold"]').eq(0).then((e) => changedObj.fillageSetPoint = e[0].value);
-            await cy.get('input[formcontrolname="thresholdTicks"]').then((e) => changedObj.pumpOffStrokesAllowed = e[0].value);
-            await cy.get('input[formcontrolname="minFillageStartupStrokesCount"]').then((e) => changedObj.startUpStrokes = e[0].value);
-            await cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                .invoke('val', 'aria-checked')
-                .then(async (e) => {
-                    if (e[0].checked) {
-                        await cy.get('input[formcontrolname="threshold"]').eq(1).then((e) => changedObj.secondaryFillageSetPoint = e[0].value);
-                    }
-                })
-        }
-
-        async function pipMode(changedObj) {
-            await cy.get('input[formcontrolname="threshold"]').eq(0).then((e) => changedObj.pipSetPoint = e[0].value);
-            await cy.get('input[formcontrolname="thresholdTicks"]').then((e) => changedObj.pumpOffStrokesAllowed = e[0].value);
-            await cy.get('input[formcontrolname="minPIPStartupStrokesCount"]').then((e) => changedObj.startUpStrokes = e[0].value);
-            await cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                .invoke('val', 'aria-checked')
-                .then(async (e) => {
-                    if (e[0].checked) {
-                        await cy.get('input[formcontrolname="threshold"]').eq(1).then((e) => changedObj.secondaryPIPSetPoint = e[0].value);
-                    }
-                })
         }
 
         //login
