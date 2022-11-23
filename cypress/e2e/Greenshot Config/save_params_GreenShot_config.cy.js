@@ -20,7 +20,7 @@ describe('GreenShot Configuration', () => {
         function commands() {
             cy.get('.well-list__group').contains(wellName).click();
             cy.wait(1000);
-            cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
+            cy.get('button[class=mat-button-toggle-button]').contains('Greenshot').click();
             cy.get('.sis-tabs__item').contains('System Parameters').click();
             configurationCommands();
         }

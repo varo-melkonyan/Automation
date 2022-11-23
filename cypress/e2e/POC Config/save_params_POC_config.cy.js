@@ -2,7 +2,7 @@ describe('POC Configuration', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "Test123";                         //Well name
-    const configMode = ["Greenshot", "Well Manager", "Greenshot and Well Manager"];
+    const configMode = ["Greenshot", "Well Manager"];
     let currentMode = 0;
 
     let firstChange = {};
@@ -30,10 +30,9 @@ describe('POC Configuration', () => {
                 // configMode
                 await cy.get('.expand-collapse__button').click();
                 await cy.wait(1000);
-                // await valuesInputs();
                 await changeValues(0);
-                // await cy.wait(2000);
-                // await changeValues(1);
+                await cy.wait(2000);
+                await changeValues(1);
             });
         }
 
@@ -43,42 +42,53 @@ describe('POC Configuration', () => {
             await cy.get('.mat-input-element').then(() => {
                 let allValues = Object.values(data[0][0].POC_Settings);
 
-                if (configMode[currentMode] === "Greenshot") {
-                    console.log(configMode[currentMode]);
-                    cy.get('.mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (!e[0].checked) {
-                                cy.get('.mat-slide-toggle-label').click();
+                cy.get('.mat-slide-toggle-input')
+                    .invoke('val', 'aria-checked')
+                    .then((e) => {
+                        if (!e[0].checked) {
+                            cy.get('.mat-slide-toggle-label').click();
+                        }
+                    });
+                cy.get('.mat-slide-toggle-input')
+                    .invoke('val', 'aria-checked')
+                    .then((e) => {
+                        if (e[0].checked) {
+                            //withoutpassword
+                            for (let i = 0; i < allValues.length; i++) {
+                                if(i === 3) {
+                                    continue;
+                                }
+                                cy.get('.mat-input-element').eq(i)
+                                    .clear().type(allValues[i][range]);
                             }
-                        });
-                    cy.get('.mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (e[0].checked) {
-                                //withoutpassword
-                                for (let i = 0; i < 3; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(allValues[i][range]);
-                                }
-                                for (let i = 4; i < 21; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(allValues[i][range]);
-                                }
-                                for (let i = 25; i < allValues.length; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(allValues[i][range]);
-                                }
-
-                            }
-                        });
-                }
+                        }
+                    });
             });
-            cy.get('#saveControl').click();
+            cy.get('#saveConfig').click();
             cy.wait(3000);
-            cy.reload();
-            // cy.get('.mat-radio-checked').contains('GreenShot or Well manager');
-            cy.get('.mat-input-element').then(async () => {
+            await changeOPMode();
+        }
+
+        async function changeOPMode() {
+            switch (currentMode) {
+                case 0: {
+                    await cy.get('.mat-radio-outer-circle').eq(currentMode).click();
+                    await cy.get('#saveConfig').click();
+                    await cy.reload();
+                    await cy.get('.sis-tabs__item').contains('System Parameters').click();
+                    await cy.get('.mat-slide-toggle-label').click();
+                    await cy.get('.mat-radio-outer-circle').eq(2).click();
+                    await cy.get('#saveConfig').click();
+                    await cy.reload();
+                    await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
+                    await cy.get('.sis-tabs__item').contains('Configuration').click();
+                    await cy.get('.mat-slide-toggle-label').click();
+                }
+                case 1:
+                    console.log("geeeeeeeeeeeee")
+            }
+
+            await cy.get('.mat-input-element').then(async () => {
                 if (range === 0) {
                     await getValues(range, firstChange);
                 } else if (range === 1) {
@@ -88,7 +98,7 @@ describe('POC Configuration', () => {
             });
         }
 
-        async function valuesInputs(changedObj) {
+        async function getValues(range, changedObj) {
             // Well settings params
             await cy.get('input[formcontrolname="displayName"]').then((e) => changedObj.displayName = e[0].value);
             await cy.get('input[formcontrolname="latitude"]').then((e) => changedObj.latitude = e[0].value);
@@ -158,6 +168,12 @@ describe('POC Configuration', () => {
                     await cy.get('input[formcontrolname="motorRatedPower"]').then((e) => changedObj.motorRatedPower = e[0].value);
                 }
             });
+
+            await cy.get('.mat-input-element').then(async () => {
+                if (range === 1) {
+                    await checkValues();
+                }
+            });
         }
 
         //check values
@@ -180,24 +196,6 @@ describe('POC Configuration', () => {
             } else {
                 alert("Finish")
             }
-        }
-
-        // control setup inputs values
-        async function getValues(range, changedObj) {
-            await cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                .invoke('val', 'aria-checked')
-                .then(async (e) => {
-                    if (e[0].checked) {
-                        await vfdOn(changedObj);
-                    } else {
-                        await vfdOff(changedObj);
-                    }
-                });
-            await cy.get('input[formcontrolname="fluidFrictionRatio"]').then(async () => {
-                if (range === 1) {
-                    await checkValues();
-                }
-            });
         }
 
         //login
