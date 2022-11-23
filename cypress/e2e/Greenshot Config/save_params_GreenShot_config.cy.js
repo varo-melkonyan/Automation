@@ -30,10 +30,9 @@ describe('GreenShot Configuration', () => {
                 // configMode
                 await cy.get('.expand-collapse__button').click();
                 await cy.wait(1000);
-                // await valuesInputs();
                 await changeValues(0);
-                // await cy.wait(2000);
-                // await changeValues(1);
+                await cy.wait(2000);
+                await changeValues(1);
             });
         }
 
@@ -43,36 +42,33 @@ describe('GreenShot Configuration', () => {
             await cy.get('.mat-input-element').then(() => {
                 let allValues = Object.values(data[0][0].POC_Settings);
 
-                if (configMode[currentMode] === "Greenshot") {
-                    console.log(configMode[currentMode]);
-                    cy.get('.mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (!e[0].checked) {
-                                cy.get('.mat-slide-toggle-label').click();
+                cy.get('.mat-slide-toggle-input')
+                    .invoke('val', 'aria-checked')
+                    .then((e) => {
+                        if (!e[0].checked) {
+                            cy.get('.mat-slide-toggle-label').click();
+                        }
+                    });
+                cy.get('.mat-slide-toggle-input')
+                    .invoke('val', 'aria-checked')
+                    .then((e) => {
+                        if (e[0].checked) {
+                            //withoutpassword
+                            for (let i = 0; i < 3; i++) {
+                                cy.get('.mat-input-element').eq(i)
+                                    .clear().type(allValues[i][range]);
                             }
-                        });
-                    cy.get('.mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (e[0].checked) {
-                                //withoutpassword
-                                for (let i = 0; i < 3; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(allValues[i][range]);
-                                }
-                                for (let i = 4; i < 21; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(allValues[i][range]);
-                                }
-                                for (let i = 25; i < allValues.length; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(allValues[i][range]);
-                                }
+                            for (let i = 4; i < 21; i++) {
+                                cy.get('.mat-input-element').eq(i)
+                                    .clear().type(allValues[i][range]);
+                            }
+                            for (let i = 25; i < allValues.length; i++) {
+                                cy.get('.mat-input-element').eq(i)
+                                    .clear().type(allValues[i][range]);
+                            }
 
-                            }
-                        });
-                }
+                        }
+                    });
             });
             cy.get('#saveControl').click();
             cy.wait(3000);
@@ -88,7 +84,7 @@ describe('GreenShot Configuration', () => {
             });
         }
 
-        async function valuesInputs(changedObj) {
+        async function getValues(range, changedObj) {
             // Well settings params
             await cy.get('input[formcontrolname="displayName"]').then((e) => changedObj.displayName = e[0].value);
             await cy.get('input[formcontrolname="latitude"]').then((e) => changedObj.latitude = e[0].value);
@@ -158,6 +154,12 @@ describe('GreenShot Configuration', () => {
                     await cy.get('input[formcontrolname="motorRatedPower"]').then((e) => changedObj.motorRatedPower = e[0].value);
                 }
             });
+
+            await cy.get('.mat-input-element').then(async () => {
+                if (range === 1) {
+                    await checkValues();
+                }
+            });
         }
 
         //check values
@@ -180,24 +182,6 @@ describe('GreenShot Configuration', () => {
             } else {
                 alert("Finish")
             }
-        }
-
-        // control setup inputs values
-        async function getValues(range, changedObj) {
-            await cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                .invoke('val', 'aria-checked')
-                .then(async (e) => {
-                    if (e[0].checked) {
-                        await vfdOn(changedObj);
-                    } else {
-                        await vfdOff(changedObj);
-                    }
-                });
-            await cy.get('input[formcontrolname="fluidFrictionRatio"]').then(async () => {
-                if (range === 1) {
-                    await checkValues();
-                }
-            });
         }
 
         //login

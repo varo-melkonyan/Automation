@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63d827f2-5f2c-409d-9c8f-6ea0617115b4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Malfunction Setup/save_params_MS.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Malfunction Setup/save_params_MS.cy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cypress/e2e/Greenshot Config/save_params_GreenShot_config.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Greenshot Config/save_params_GreenShot_config.cy.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,6 +59,7 @@
       <workItem from="1669059878650" duration="5406000" />
       <workItem from="1669095074505" duration="4641000" />
       <workItem from="1669100472044" duration="10010000" />
+      <workItem from="1669189892927" duration="523000" />
     </task>
     <servers />
   </component>
