@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="63d827f2-5f2c-409d-9c8f-6ea0617115b4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Greenshot Config/save_params_GreenShot_config.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Greenshot Config/save_params_GreenShot_config.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/POC Config/assets/data_Well_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/POC Config/assets/data_Well_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cypress/e2e/POC Config/save_params_POC_config.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/POC Config/save_params_POC_config.cy.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,7 +60,7 @@
       <workItem from="1669059878650" duration="5406000" />
       <workItem from="1669095074505" duration="4641000" />
       <workItem from="1669100472044" duration="10010000" />
-      <workItem from="1669189892927" duration="5739000" />
+      <workItem from="1669189892927" duration="8102000" />
     </task>
     <servers />
   </component>

@@ -83,9 +83,20 @@ describe('POC Configuration', () => {
                     await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
                     await cy.get('.sis-tabs__item').contains('Configuration').click();
                     await cy.get('.mat-slide-toggle-label').click();
+                    break;
                 }
                 case 1:
-                    console.log("geeeeeeeeeeeee")
+                    await cy.get('.mat-radio-outer-circle').eq(currentMode).click();
+                    await cy.get('#saveConfig').click();
+                    await cy.reload();
+                    await cy.get('.mat-slide-toggle-label').click();
+                    await cy.get('.mat-radio-outer-circle').eq(2).click();
+                    await cy.get('#saveConfig').click();
+                    await cy.reload();
+                    await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
+                    await cy.get('.sis-tabs__item').contains('Configuration').click();
+                    await cy.get('.mat-slide-toggle-label').click();
+                    break;
             }
 
             await cy.get('.mat-input-element').then(async () => {
