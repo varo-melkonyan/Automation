@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="63d827f2-5f2c-409d-9c8f-6ea0617115b4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Save-Parameters.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Automation.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Control setup/assets/data_CS.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Control setup/assets/data_CS.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Control setup/save_params_CS.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Control setup/save_params_CS.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Greenshot Config/assets/data_GreenShot_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Greenshot Config/assets/data_GreenShot_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Greenshot Config/save_params_GreenShot_config.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Greenshot Config/save_params_GreenShot_config.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Hidden config/assets/data_devTab_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Hidden config/assets/data_devTab_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Hidden config/save_params_HidenTab_config.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Hidden config/save_params_HidenTab_config.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Malfunction Setup/assets/data_MS.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Malfunction Setup/assets/data_MS.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Malfunction Setup/save_params_MS.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Malfunction Setup/save_params_MS.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Other cases/csv_exports.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/CSV exports/csv_exports.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Other cases/map_view.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Map view/map_view.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/Other cases/sign_in.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Sign-in/sign_in.cy.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/POC Config/assets/data_Well_config copy.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/POC Config/assets/data_Well_config copy.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/POC Config/assets/data_Well_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/POC Config/assets/data_Well_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/POC Config/save_params_POC_config.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/POC Config/save_params_POC_config.cy.js" afterDir="false" />
-    </list>
+    <list default="true" id="63d827f2-5f2c-409d-9c8f-6ea0617115b4" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -75,7 +58,7 @@
       <workItem from="1669059878650" duration="5406000" />
       <workItem from="1669095074505" duration="4641000" />
       <workItem from="1669100472044" duration="10010000" />
-      <workItem from="1669189892927" duration="12687000" />
+      <workItem from="1669189892927" duration="12757000" />
     </task>
     <servers />
   </component>
