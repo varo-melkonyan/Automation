@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63d827f2-5f2c-409d-9c8f-6ea0617115b4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/cypress/e2e/Other cases/accessibility .cy.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cypress/e2e/Other cases/csv_exports.cy.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cypress/e2e/Other cases/map_view.cy.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cypress/e2e/Other cases/sign_in.cy.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cypress/e2e/POC Config/save_params_POC_config.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/POC Config/save_params_POC_config.cy.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +63,7 @@
       <workItem from="1669059878650" duration="5406000" />
       <workItem from="1669095074505" duration="4641000" />
       <workItem from="1669100472044" duration="10010000" />
-      <workItem from="1669189892927" duration="8102000" />
+      <workItem from="1669189892927" duration="11752000" />
     </task>
     <servers />
   </component>
