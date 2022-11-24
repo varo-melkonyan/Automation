@@ -21,7 +21,7 @@
     "gasSpecificGravity": [0.45, 2],
     "atmosphericPressure": [12, 15],
     "temperatureGradient": [0.2, 4.5],
-    "rodString_lengths": [10000, 10000],
+    "rodString_lengths": [0, 100000],
     "rodString_diameters": [1.25, 1.75],
     "rodString_linearWeights": [3, 20],
     "rodString_stiffnesses": [4, 40],
