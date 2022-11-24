@@ -169,7 +169,7 @@ describe('POC Configuration', () => {
                 if (!e[0].checked) {
                     await cy.get('input[formcontrolname="tubingAnchorDepth"]').then((e) => changedObj.tubingAnchorDepth = e[0].value);
                 } else {
-                    await cy.get('.mat-checkbox-input').eq(4).check();
+                    await cy.get('.mat-checkbox-input').eq(4).check({force: true});
                     await cy.get('input[formcontrolname="tubingAnchorDepth"]').then((e) => changedObj.tubingAnchorDepth = e[0].value);
                 }
             });
@@ -194,7 +194,8 @@ describe('POC Configuration', () => {
                     await cy.get('input[formcontrolname="motorRatedPower"]').then((e) => changedObj.motorRatedPower = e[0].value);
                 }
                 else {
-                    await cy.get('.mat-slide-toggle-input').check();
+                    await cy.get('.mat-slide-toggle-input').scrollIntoView()
+                    await cy.get('.mat-slide-toggle-input').check({force: true});
                     await cy.get('input[formcontrolname="speedMax"]').then((e) => changedObj.peakWorkingSpeed = e[0].value);
                     await cy.get('input[formcontrolname="speedMin"]').then((e) => changedObj.minWorkingSpeed = e[0].value);
                     await cy.get('input[formcontrolname="speedIncrease"]').then((e) => changedObj.speedIncrease = e[0].value);
