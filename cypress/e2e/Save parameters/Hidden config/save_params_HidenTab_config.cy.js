@@ -11,7 +11,7 @@ describe('POC Configuration', () => {
     it('POC config parameters', () => {
         let data = [];
         // get data
-        cy.fixture('../e2e/POC Config/assets/data_Well_config')
+        cy.fixture('../e2e/Save parameters/POC Config/assets/data_Well_config')
             .then(async (e) => {
                 data.push(e);
             });

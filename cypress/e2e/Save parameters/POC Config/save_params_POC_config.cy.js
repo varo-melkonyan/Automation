@@ -11,7 +11,7 @@ describe('POC Configuration', () => {
     it('POC config parameters', () => {
         let data = [];
         // get data
-        cy.fixture('../e2e/POC Config/assets/data_Well_config')
+        cy.fixture('../e2e/Save parameters/POC Config/assets/data_Well_config')
             .then(async (e) => {
                 data.push(e);
             });
@@ -55,48 +55,47 @@ describe('POC Configuration', () => {
                         if (e[0].checked) {
                             //withoutpassword
                             for (let i = 0; i < allValues.length; i++) {
-                                if(i === 3) {
+                                if (i === 3) {
                                     continue;
                                 }
                                 cy.get('.mat-input-element').eq(i)
-                                    .clear().type(allValues[i][range]);
+                                    .clear({force: true}).type(allValues[i][range], {force: true});
                             }
                         }
                     });
             });
             cy.get('#saveConfig').click();
             cy.wait(3000);
-            await changeOPMode();
+            await changeOPMode(range);
         }
 
-        async function changeOPMode() {
-            switch (currentMode) {
-                case 0: {
-                    await cy.get('.mat-radio-outer-circle').eq(currentMode).click();
-                    await cy.get('#saveConfig').click();
-                    await cy.reload();
-                    await cy.get('.sis-tabs__item').contains('System Parameters').click();
-                    await cy.get('.mat-slide-toggle-label').click();
-                    await cy.get('.mat-radio-outer-circle').eq(2).click();
-                    await cy.get('#saveConfig').click();
-                    await cy.reload();
-                    await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
-                    await cy.get('.sis-tabs__item').contains('Configuration').click();
-                    await cy.get('.mat-slide-toggle-label').click();
-                    break;
-                }
-                case 1:
-                    await cy.get('.mat-radio-outer-circle').eq(currentMode).click();
-                    await cy.get('#saveConfig').click();
-                    await cy.reload();
-                    await cy.get('.mat-slide-toggle-label').click();
-                    await cy.get('.mat-radio-outer-circle').eq(2).click();
-                    await cy.get('#saveConfig').click();
-                    await cy.reload();
-                    await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
-                    await cy.get('.sis-tabs__item').contains('Configuration').click();
-                    await cy.get('.mat-slide-toggle-label').click();
-                    break;
+        async function changeOPMode(range) {
+            if (currentMode === 0) {
+                await cy.get('.expand-collapse__label').click();
+                await cy.get('.mat-radio-label').eq(0).click({force: true});
+                await cy.get('.mat-raised-button').click();
+                await cy.reload();
+                await cy.get('.sis-tabs__item').contains('System Parameters').click();
+                await cy.get('.expand-collapse__label').click();
+                await cy.get('.mat-radio-outer-circle').eq(2).click({force: true});
+                await cy.get('#saveSysParam').click();
+                await cy.reload();
+                await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
+                await cy.get('.sis-tabs__item').contains('Configuration').click();
+                await cy.get('.expand-collapse__label').click();
+                cy.pause();
+            } else if (currentMode === 1) {
+                await cy.get('.expand-collapse__label').click();
+                await cy.get('.mat-radio-label').eq(1).click({force: true});
+                await cy.get('.mat-raised-button').click();
+                await cy.reload();
+                await cy.get('.expand-collapse__label').click();
+                await cy.get('.mat-radio-outer-circle').eq(2).click({force: true});
+                await cy.get('.mat-raised-button').click();
+                await cy.reload();
+                await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
+                await cy.get('.sis-tabs__item').contains('Configuration').click();
+                await cy.get('.expand-collapse__label').click();
             }
 
             await cy.get('.mat-input-element').then(async () => {
@@ -189,6 +188,7 @@ describe('POC Configuration', () => {
 
         //check values
         async function checkValues() {
+            console.log("checkValues()");
             for (let i = 0; i < Object.values(firstChange).length; i++) {
                 if (Object.values(firstChange)[i] === Object.values(secondChange)[i]) {
                     console.log(Object.values(firstChange));

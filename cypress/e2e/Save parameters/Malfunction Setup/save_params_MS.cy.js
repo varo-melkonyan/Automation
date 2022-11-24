@@ -12,7 +12,7 @@ describe('Malfunction setup', () => {
     it('Save malfunction setup parameters', () => {
         let data = [];
         // get data
-        cy.fixture('../e2e/Malfunction Setup/assets/data_MS')
+        cy.fixture('../e2e/Save parameters/Malfunction Setup/assets/data_MS')
             .then(async (e) => {
                 data.push(e);
             });

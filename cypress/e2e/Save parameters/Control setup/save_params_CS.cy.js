@@ -11,7 +11,7 @@ describe('Control setup', () => {
     it('Save control setup parameters', () => {
         let data = [];
         // get data
-        cy.fixture('../e2e/Control setup/assets/data_CS')
+        cy.fixture('../e2e/Save parameters/Control setup/assets/data_CS')
             .then(async (e) => {
                 data.push(e);
             });
