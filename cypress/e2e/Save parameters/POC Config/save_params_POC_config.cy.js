@@ -78,13 +78,14 @@ describe('POC Configuration', () => {
                 await cy.get('.sis-tabs__item').contains('System Parameters').click();
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-outer-circle').eq(2).click({force: true});
+                cy.pause()
                 await cy.get('#saveSysParam').click();
                 await cy.reload();
                 await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
                 await cy.get('.sis-tabs__item').contains('Configuration').click();
                 await cy.get('.expand-collapse__label').click();
-                cy.pause();
             } else if (currentMode === 1) {
+                console.log("true")
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-label').eq(1).click({force: true});
                 await cy.get('.mat-raised-button').click();
@@ -122,11 +123,17 @@ describe('POC Configuration', () => {
             await cy.get('.mat-checkbox-input').eq(0).invoke('val', 'aria-checked').then(async (e) => {
                 if (!e[0].checked) {
                     await cy.get('input[formcontrolname="fluidBubblingGor"]').then((e) => changedObj.fluidBubblingGor = e[0].value);
+                } else {
+                    await cy.get('.mat-checkbox-input').eq(0).check({force: true});
+                    await cy.get('input[formcontrolname="fluidBubblingGor"]').then((e) => changedObj.fluidBubblingGor = e[0].value);
                 }
             });
             await cy.get('input[formcontrolname="waterSpecificGravity"]').then((e) => changedObj.waterSpecificGravity = e[0].value);
             await cy.get('.mat-checkbox-input').eq(1).invoke('val', 'aria-checked').then(async (e) => {
                 if (!e[0].checked) {
+                    await cy.get('input[formcontrolname="fluidBubblingPressure"]').then((e) => changedObj.fluidBubblingPressure = e[0].value);
+                } else {
+                    await cy.get('.mat-checkbox-input').eq(1).check({force: true});
                     await cy.get('input[formcontrolname="fluidBubblingPressure"]').then((e) => changedObj.fluidBubblingPressure = e[0].value);
                 }
             });
@@ -134,12 +141,18 @@ describe('POC Configuration', () => {
             await cy.get('.mat-checkbox-input').eq(2).invoke('val', 'aria-checked').then(async (e) => {
                 if (!e[0].checked) {
                     await cy.get('input[formcontrolname="oilFormationFactor"]').then((e) => changedObj.oilFormationFactor = e[0].value);
+                } else {
+                    await cy.get('.mat-checkbox-input').eq(2).check({force: true});
+                    await cy.get('input[formcontrolname="oilFormationFactor"]').then((e) => changedObj.oilFormationFactor = e[0].value);
                 }
             });
 
             await cy.get('input[formcontrolname="fluidViscosity"]').then((e) => changedObj.fluidViscosity = e[0].value);
             await cy.get('.mat-checkbox-input').eq(3).invoke('val', 'aria-checked').then(async (e) => {
                 if (!e[0].checked) {
+                    await cy.get('input[formcontrolname="fluidPressureGradient"]').then((e) => changedObj.fluidPressureGradient = e[0].value);
+                } else {
+                    await cy.get('.mat-checkbox-input').eq(3).check({force: true});
                     await cy.get('input[formcontrolname="fluidPressureGradient"]').then((e) => changedObj.fluidPressureGradient = e[0].value);
                 }
             });
@@ -154,6 +167,9 @@ describe('POC Configuration', () => {
             //Tubing
             await cy.get('.mat-checkbox-input').eq(4).invoke('val', 'aria-checked').then(async (e) => {
                 if (!e[0].checked) {
+                    await cy.get('input[formcontrolname="tubingAnchorDepth"]').then((e) => changedObj.tubingAnchorDepth = e[0].value);
+                } else {
+                    await cy.get('.mat-checkbox-input').eq(4).check();
                     await cy.get('input[formcontrolname="tubingAnchorDepth"]').then((e) => changedObj.tubingAnchorDepth = e[0].value);
                 }
             });
@@ -177,6 +193,19 @@ describe('POC Configuration', () => {
                     await cy.get('input[formcontrolname="inverterRatedPower"]').then((e) => changedObj.inverterRatedPower = e[0].value);
                     await cy.get('input[formcontrolname="motorRatedPower"]').then((e) => changedObj.motorRatedPower = e[0].value);
                 }
+                else {
+                    await cy.get('.mat-slide-toggle-input').check();
+                    await cy.get('input[formcontrolname="speedMax"]').then((e) => changedObj.peakWorkingSpeed = e[0].value);
+                    await cy.get('input[formcontrolname="speedMin"]').then((e) => changedObj.minWorkingSpeed = e[0].value);
+                    await cy.get('input[formcontrolname="speedIncrease"]').then((e) => changedObj.speedIncrease = e[0].value);
+                    await cy.get('input[formcontrolname="speedDecrease"]').then((e) => changedObj.speedDecrease = e[0].value);
+                    await cy.get('input[formcontrolname="startupSpeed"]').then((e) => changedObj.startUpSpeed = e[0].value);
+                    await cy.get('input[formcontrolname="deadBandRate"]').then((e) => changedObj.deadBand = e[0].value);
+                    await cy.get('input[formcontrolname="deadBandTicks"]').then((e) => changedObj.deadBandStrokes = e[0].value);
+                    await cy.get('input[formcontrolname="constantSpeed"]').then((e) => changedObj.constantSpeed = e[0].value);
+                    await cy.get('input[formcontrolname="inverterRatedPower"]').then((e) => changedObj.inverterRatedPower = e[0].value);
+                    await cy.get('input[formcontrolname="motorRatedPower"]').then((e) => changedObj.motorRatedPower = e[0].value);
+                }
             });
 
             await cy.get('.mat-input-element').then(async () => {
@@ -188,7 +217,8 @@ describe('POC Configuration', () => {
 
         //check values
         async function checkValues() {
-            console.log("checkValues()");
+            console.log(firstChange);
+            console.log(secondChange);
             for (let i = 0; i < Object.values(firstChange).length; i++) {
                 if (Object.values(firstChange)[i] === Object.values(secondChange)[i]) {
                     console.log(Object.values(firstChange));
