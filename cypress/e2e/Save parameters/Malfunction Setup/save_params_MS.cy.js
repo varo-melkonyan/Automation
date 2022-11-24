@@ -163,6 +163,10 @@ describe('Malfunction setup', () => {
                     cy.log(Object.values(secondChange), "Changed values");
                     cy.log(Object.values(secondChange)[i], "Input value");
                     cy.log(i, "Index value");
+                    console.log(Object.values(firstChange), "Default values");
+                    console.log(Object.values(secondChange), "Changed values");
+                    console.log(Object.values(secondChange)[i], "Input value");
+                    console.log(i, "Index value");
                     cy.pause();
                 }
             }
@@ -175,6 +179,7 @@ describe('Malfunction setup', () => {
             } else {
                 cy.pause();
                 cy.log("Finish");
+                console.log("Finish");
                 alert("Finish");
             }
         }

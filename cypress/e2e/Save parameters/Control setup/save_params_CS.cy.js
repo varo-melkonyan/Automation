@@ -48,6 +48,7 @@ describe('Control setup', () => {
 
                 if (controlMode[currentMode] === "Fillage") {
                     cy.log(controlMode[currentMode]);
+                    console.log(controlMode[currentMode]);
                     cy.get('.mat-select').eq(1).click().type('1').type('{enter}');
                     cy.get('.mat-select').eq(2).click().type('01').type('{enter}');
                     cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
@@ -103,6 +104,7 @@ describe('Control setup', () => {
                         });
                 } else if (controlMode[currentMode] === "PIP") {
                     cy.log(controlMode[currentMode]);
+                    console.log(controlMode[currentMode]);
                     cy.get('.mat-select').eq(1).click().type('1').type('{enter}');
                     cy.get('.mat-select').eq(2).click().type('01').type('{enter}');
                     cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
@@ -173,6 +175,7 @@ describe('Control setup', () => {
                     cy.get('[formgroupname="zoneControl"] .mat-checkbox-input').invoke('val', 'aria-checked').then(async (e) => {
                         if (e[0].checked) {
                             cy.log(controlMode[currentMode]);
+                            console.log(controlMode[currentMode]);
                             cy.get('.mat-select').eq(1).click().type('1').type('{enter}');
                             cy.get('.mat-select').eq(2).click().type('01').type('{enter}');
                             //Off time
@@ -214,6 +217,7 @@ describe('Control setup', () => {
 
                 } else {
                     cy.log("Host Mode");
+                    console.log("Host Mode");
                     cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
                         .invoke('val', 'aria-checked')
                         .then((e) => {
@@ -271,6 +275,10 @@ describe('Control setup', () => {
                     cy.log(Object.values(secondChange), "Changed values");
                     cy.log(Object.values(secondChange)[i], "Input value");
                     cy.log(i, "Index value");
+                    console.log(Object.values(firstChange), "Default values")
+                    console.log(Object.values(secondChange), "Changed values");
+                    console.log(Object.values(secondChange)[i], "Input value");
+                    console.log(i, "Index value");
                     cy.pause();
                 }
 
@@ -283,6 +291,7 @@ describe('Control setup', () => {
                 await controlSetupCommands();
             } else {
                 cy.log("Finish");
+                console.log("Finish");
                 alert("Finish");
             }
         }
@@ -312,6 +321,7 @@ describe('Control setup', () => {
                 await pipMode(changedObj);
             } else {
                 cy.log(controlMode[currentMode]);
+                console.log(controlMode[currentMode]);
             }
             // Dynagraph Card Settings
             await cy.get('input[formcontrolname="fillBaseRatio"]').then((e) => changedObj.fillbase = e[0].value);
@@ -350,6 +360,7 @@ describe('Control setup', () => {
                 await pipMode(changedObj);
             } else {
                 cy.log(controlMode[currentMode]);
+                console.log(controlMode[currentMode]);
             }
             // Dynagraph Card Settings
             await cy.get('input[formcontrolname="fillBaseRatio"]').then((e) => changedObj.fillbase = e[0].value);

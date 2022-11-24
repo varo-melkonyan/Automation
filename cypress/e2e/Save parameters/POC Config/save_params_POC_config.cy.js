@@ -226,6 +226,10 @@ describe('POC Configuration', () => {
                     cy.log(Object.values(secondChange));
                     cy.log(Object.values(secondChange)[i]);
                     cy.log(i);
+                    console.log(Object.values(firstChange));
+                    console.log(Object.values(secondChange));
+                    console.log(Object.values(secondChange)[i]);
+                    console.log(i);
                     cy.pause();
                 }
             }
@@ -237,6 +241,7 @@ describe('POC Configuration', () => {
                 await configurationCommands();
             } else {
                 cy.log("Finish");
+                console.log("Finish");
                 alert("Finish");
             }
         }

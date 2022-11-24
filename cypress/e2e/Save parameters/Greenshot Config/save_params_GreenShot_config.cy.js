@@ -181,6 +181,7 @@ describe('GreenShot Configuration', () => {
                 await configurationCommands();
             } else {
                 cy.log("Finish");
+                console.log("Finish");
                 alert("Finish");
             }
         }
