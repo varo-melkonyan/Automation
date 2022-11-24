@@ -282,7 +282,8 @@ describe('Control setup', () => {
                 currentMode += 1;
                 await controlSetupCommands();
             } else {
-                alert("Finish")
+                cy.log("Finish");
+                alert("Finish");
             }
         }
 

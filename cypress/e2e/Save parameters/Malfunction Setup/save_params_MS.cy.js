@@ -174,7 +174,8 @@ describe('Malfunction setup', () => {
                 await malfunctionSetupCommands();
             } else {
                 cy.pause();
-                alert("Finish")
+                cy.log("Finish");
+                alert("Finish");
             }
         }
 

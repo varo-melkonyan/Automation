@@ -180,7 +180,8 @@ describe('GreenShot Configuration', () => {
                 currentMode += 1;
                 await configurationCommands();
             } else {
-                alert("Finish")
+                cy.log("Finish");
+                alert("Finish");
             }
         }
 

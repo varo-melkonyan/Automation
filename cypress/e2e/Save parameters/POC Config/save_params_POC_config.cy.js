@@ -78,14 +78,12 @@ describe('POC Configuration', () => {
                 await cy.get('.sis-tabs__item').contains('System Parameters').click();
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-outer-circle').eq(2).click({force: true});
-                cy.pause()
                 await cy.get('#saveSysParam').click();
                 await cy.reload();
                 await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
                 await cy.get('.sis-tabs__item').contains('Configuration').click();
                 await cy.get('.expand-collapse__label').click();
             } else if (currentMode === 1) {
-                console.log("true")
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-label').eq(1).click({force: true});
                 await cy.get('.mat-raised-button').click();
@@ -163,6 +161,10 @@ describe('POC Configuration', () => {
             await cy.get('input[formcontrolname="atmosphericPressure"]').then((e) => changedObj.atmosphericPressure = e[0].value);
             await cy.get('input[formcontrolname="atmosphericPressure"]').then((e) => changedObj.atmosphericPressure = e[0].value);
             //Rods
+            await cy.get('.mat-input-element').eq(21).then((e) => changedObj.rodStringlengths = e[0].value);
+            await cy.get('.mat-input-element').eq(22).then((e) => changedObj.rodStringdiameters = e[0].value);
+            await cy.get('.mat-input-element').eq(23).then((e) => changedObj.rodStringlinearWeights = e[0].value);
+            await cy.get('.mat-input-element').eq(24).then((e) => changedObj.rodStringstiffnesses = e[0].value);
             await cy.get('input[formcontrolname="serviceFactor"]').then((e) => changedObj.serviceFactor = e[0].value);
             //Tubing
             await cy.get('.mat-checkbox-input').eq(4).invoke('val', 'aria-checked').then(async (e) => {
@@ -218,14 +220,12 @@ describe('POC Configuration', () => {
 
         //check values
         async function checkValues() {
-            console.log(firstChange);
-            console.log(secondChange);
             for (let i = 0; i < Object.values(firstChange).length; i++) {
                 if (Object.values(firstChange)[i] === Object.values(secondChange)[i]) {
-                    console.log(Object.values(firstChange));
-                    console.log(Object.values(secondChange));
-                    console.log(Object.values(secondChange)[i]);
-                    console.log(i)
+                    cy.log(Object.values(firstChange));
+                    cy.log(Object.values(secondChange));
+                    cy.log(Object.values(secondChange)[i]);
+                    cy.log(i);
                     cy.pause();
                 }
             }
@@ -236,7 +236,8 @@ describe('POC Configuration', () => {
                 currentMode += 1;
                 await configurationCommands();
             } else {
-                alert("Finish")
+                cy.log("Finish");
+                alert("Finish");
             }
         }
 
