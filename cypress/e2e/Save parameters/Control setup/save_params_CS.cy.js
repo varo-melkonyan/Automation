@@ -47,7 +47,7 @@ describe('Control setup', () => {
                 let valuesVfdSpeedZone = Object.values(data[0][3].vfdSpeedZone);
 
                 if (controlMode[currentMode] === "Fillage") {
-                    console.log(controlMode[currentMode]);
+                    cy.log(controlMode[currentMode]);
                     cy.get('.mat-select').eq(1).click().type('1').type('{enter}');
                     cy.get('.mat-select').eq(2).click().type('01').type('{enter}');
                     cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
@@ -102,7 +102,7 @@ describe('Control setup', () => {
                             }
                         });
                 } else if (controlMode[currentMode] === "PIP") {
-                    console.log(controlMode[currentMode]);
+                    cy.log(controlMode[currentMode]);
                     cy.get('.mat-select').eq(1).click().type('1').type('{enter}');
                     cy.get('.mat-select').eq(2).click().type('01').type('{enter}');
                     cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
@@ -172,7 +172,7 @@ describe('Control setup', () => {
                     });
                     cy.get('[formgroupname="zoneControl"] .mat-checkbox-input').invoke('val', 'aria-checked').then(async (e) => {
                         if (e[0].checked) {
-                            console.log(controlMode[currentMode]);
+                            cy.log(controlMode[currentMode]);
                             cy.get('.mat-select').eq(1).click().type('1').type('{enter}');
                             cy.get('.mat-select').eq(2).click().type('01').type('{enter}');
                             //Off time
@@ -213,7 +213,7 @@ describe('Control setup', () => {
                     });
 
                 } else {
-                    console.log("Host Mode");
+                    cy.log("Host Mode");
                     cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
                         .invoke('val', 'aria-checked')
                         .then((e) => {
@@ -267,10 +267,10 @@ describe('Control setup', () => {
         async function checkValues() {
             for (let i = 0; i < Object.values(firstChange).length; i++) {
                 if (Object.values(firstChange)[i] === Object.values(secondChange)[i]) {
-                    console.log(Object.values(firstChange), "Default values");
-                    console.log(Object.values(secondChange), "Changed values");
-                    console.log(Object.values(secondChange)[i], "Input value");
-                    console.log(i, "Index value");
+                    cy.log(Object.values(firstChange), "Default values")
+                    cy.log(Object.values(secondChange), "Changed values");
+                    cy.log(Object.values(secondChange)[i], "Input value");
+                    cy.log(i, "Index value");
                     cy.pause();
                 }
 
@@ -310,7 +310,7 @@ describe('Control setup', () => {
             } else if (controlMode[currentMode] === "PIP") {
                 await pipMode(changedObj);
             } else {
-                console.log(controlMode[currentMode]);
+                cy.log(controlMode[currentMode]);
             }
             // Dynagraph Card Settings
             await cy.get('input[formcontrolname="fillBaseRatio"]').then((e) => changedObj.fillbase = e[0].value);
@@ -348,7 +348,7 @@ describe('Control setup', () => {
             } else if (controlMode[currentMode] === "PIP") {
                 await pipMode(changedObj);
             } else {
-                console.log(controlMode[currentMode]);
+                cy.log(controlMode[currentMode]);
             }
             // Dynagraph Card Settings
             await cy.get('input[formcontrolname="fillBaseRatio"]').then((e) => changedObj.fillbase = e[0].value);
