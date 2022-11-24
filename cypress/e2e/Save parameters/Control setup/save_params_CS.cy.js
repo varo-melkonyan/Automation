@@ -70,15 +70,15 @@ describe('Control setup', () => {
                             if (e[0].checked) {
                                 for (let i = 0; i < valuesFillage.length; i++) {
                                     cy.get('.mat-input-element').eq(i)
-                                        .clear().type(valuesFillage[i][range]);
+                                        .clear().type(valuesFillage[i][range], {force: true});
                                 }
                                 for (let j = 0; j < valuesDynagraph.length; j++) {
                                     cy.get('.mat-input-element').eq(valuesFillage.length + j)
-                                        .clear().type(valuesDynagraph[j][range]);
+                                        .clear().type(valuesDynagraph[j][range], {force: true});
                                 }
                                 for (let k = 0; k < valuesVfd.length; k++) {
                                     cy.get('.mat-input-element').eq(valuesDynagraph.length + valuesFillage.length + k)
-                                        .clear().type(valuesVfd[k][range]);
+                                        .clear().type(valuesVfd[k][range], {force: true});
                                 }
                                 cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
                                     .invoke('val', 'aria-checked')
@@ -88,16 +88,16 @@ describe('Control setup', () => {
                                             for (let q = 0; q < valuesVfdSpeedZone.length; q++) {
                                                 cy.get('.mat-input-element')
                                                     .eq(valuesFillage.length + valuesDynagraph.length + valuesVfd.length + q)
-                                                    .clear().type(valuesVfdSpeedZone[q][range]);
+                                                    .clear().type(valuesVfdSpeedZone[q][range], {force: true});
                                             }
                                         }
                                     })
                             } else {
                                 for (let i = 0; i < valuesFillage.length - 1; i++) {
-                                    cy.get('.mat-input-element').eq(i).clear().type(valuesFillage[i][range]);
+                                    cy.get('.mat-input-element').eq(i).clear().type(valuesFillage[i][range], {force: true});
                                 }
                                 for (let j = 0; j < valuesDynagraph.length; j++) {
-                                    cy.get('.mat-input-element').eq(valuesFillage.length - 1 + j).clear().type(valuesDynagraph[j][range]);
+                                    cy.get('.mat-input-element').eq(valuesFillage.length - 1 + j).clear().type(valuesDynagraph[j][range], {force: true});
                                 }
                             }
                         });
@@ -133,15 +133,15 @@ describe('Control setup', () => {
                             if (e[0].checked) {
                                 for (let i = 0; i < valuesPip.length; i++) {
                                     cy.get('.mat-input-element').eq(i)
-                                        .clear().type(valuesPip[i][range]);
+                                        .clear().type(valuesPip[i][range], {force: true});
                                 }
                                 for (let j = 0; j < valuesDynagraph.length; j++) {
                                     cy.get('.mat-input-element').eq(valuesPip.length + j)
-                                        .clear().type(valuesDynagraph[j][range]);
+                                        .clear().type(valuesDynagraph[j][range], {force: true});
                                 }
                                 for (let k = 0; k < valuesVfd.length; k++) {
                                     cy.get('.mat-input-element').eq(valuesDynagraph.length + valuesPip.length + k)
-                                        .clear().type(valuesVfd[k][range]);
+                                        .clear().type(valuesVfd[k][range], {force: true});
                                 }
                                 cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
                                     .invoke('val', 'aria-checked')
@@ -151,16 +151,16 @@ describe('Control setup', () => {
                                             for (let q = 0; q < valuesVfdSpeedZone.length; q++) {
                                                 cy.get('.mat-input-element')
                                                     .eq(valuesPip.length + valuesDynagraph.length + valuesVfd.length + q)
-                                                    .clear().type(valuesVfdSpeedZone[q][range]);
+                                                    .clear().type(valuesVfdSpeedZone[q][range], {force: true});
                                             }
                                         }
                                     })
                             } else {
                                 for (let i = 0; i < valuesPip.length - 1; i++) {
-                                    cy.get('.mat-input-element').eq(i).clear().type(valuesPip[i][range]);
+                                    cy.get('.mat-input-element').eq(i).clear().type(valuesPip[i][range], {force: true});
                                 }
                                 for (let j = 0; j < valuesDynagraph.length; j++) {
-                                    cy.get('.mat-input-element').eq(valuesPip.length - 1 + j).clear().type(valuesDynagraph[j][range]);
+                                    cy.get('.mat-input-element').eq(valuesPip.length - 1 + j).clear().type(valuesDynagraph[j][range], {force: true});
                                 }
                             }
                         });
@@ -185,11 +185,11 @@ describe('Control setup', () => {
                                     if (e[0].checked) {
                                         for (let j = 0; j < valuesDynagraph.length; j++) {
                                             cy.get('.mat-input-element').eq(j)
-                                                .clear().type(valuesDynagraph[j][range]);
+                                                .clear().type(valuesDynagraph[j][range], {force: true});
                                         }
                                         for (let k = 0; k < valuesVfd.length; k++) {
                                             cy.get('.mat-input-element').eq(valuesDynagraph.length + k)
-                                                .clear().type(valuesVfd[k][range]);
+                                                .clear().type(valuesVfd[k][range], {force: true});
                                         }
                                         cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
                                             .invoke('val', 'aria-checked')
@@ -199,13 +199,13 @@ describe('Control setup', () => {
                                                     for (let q = 0; q < valuesVfdSpeedZone.length; q++) {
                                                         cy.get('.mat-input-element')
                                                             .eq(valuesDynagraph.length + valuesVfd.length + q)
-                                                            .clear().type(valuesVfdSpeedZone[q][range]);
+                                                            .clear().type(valuesVfdSpeedZone[q][range], {force: true});
                                                     }
                                                 }
                                             })
                                     } else {
                                         for (let j = 0; j < valuesDynagraph.length; j++) {
-                                            cy.get('.mat-input-element').eq(j).clear().type(valuesDynagraph[j][range]);
+                                            cy.get('.mat-input-element').eq(j).clear().type(valuesDynagraph[j][range], {force: true});
                                         }
                                     }
                                 });
@@ -220,11 +220,11 @@ describe('Control setup', () => {
                             if (e[0].checked) {
                                 for (let j = 0; j < valuesDynagraph.length; j++) {
                                     cy.get('.mat-input-element').eq(j)
-                                        .clear().type(valuesDynagraph[j][range]);
+                                        .clear().type(valuesDynagraph[j][range], {force: true});
                                 }
                                 for (let k = 0; k < valuesVfd.length; k++) {
                                     cy.get('.mat-input-element').eq(valuesDynagraph.length + k)
-                                        .clear().type(valuesVfd[k][range]);
+                                        .clear().type(valuesVfd[k][range], {force: true});
                                 }
                                 cy.get('[formgroupname="zoneControl"] .mat-checkbox-input')
                                     .invoke('val', 'aria-checked')
@@ -238,13 +238,13 @@ describe('Control setup', () => {
                                             for (let q = 0; q < valuesVfdSpeedZone.length; q++) {
                                                 cy.get('.mat-input-element')
                                                     .eq(valuesDynagraph.length + valuesVfd.length + q)
-                                                    .clear().type(valuesVfdSpeedZone[q][range]);
+                                                    .clear().type(valuesVfdSpeedZone[q][range], {force: true});
                                             }
                                         }
                                     })
                             } else {
                                 for (let j = 0; j < valuesDynagraph.length; j++) {
-                                    cy.get('.mat-input-element').eq(j).clear().type(valuesDynagraph[j][range]);
+                                    cy.get('.mat-input-element').eq(j).clear().type(valuesDynagraph[j][range], {force: true});
                                 }
                             }
                         });
