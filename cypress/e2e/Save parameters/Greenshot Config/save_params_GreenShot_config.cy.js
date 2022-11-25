@@ -41,7 +41,9 @@ describe('GreenShot Configuration', () => {
         async function changeValues(range) {
             await cy.get('.mat-input-element').then(() => {
                 let allValues = Object.values(data[0][0].GreenShot_Config);
-
+                if ((range === 1 && currentMode === 1) || (range === 1 && currentMode === 2) || (range === 0 && currentMode === 2)) {
+                    cy.get('.sis-delete-row').eq(1).click();
+                }
                 //withoutpassword
                 for (let i = 0; i < allValues.length; i++) {
                     if (i === 3) {
@@ -65,6 +67,7 @@ describe('GreenShot Configuration', () => {
                 await cy.get('.sis-tabs__item').contains('Configuration').click();
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-outer-circle').eq(0).click({force: true});
+                await cy.pause();
                 await cy.get('#saveConfig').click();
                 await cy.reload();
                 await cy.get('.sis-tabs__item').contains('System Parameters').click();
