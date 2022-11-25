@@ -1,5 +1,5 @@
 [{
-  "HiddenTab_Settings": {
+  "GreenShot_Config": {
     "wellName": ["Well name test", "Well test KWM-145.5"],
     "latitude": [-90, 90],
     "longitude": [-180, 180],
