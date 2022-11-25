@@ -5,6 +5,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cypress/e2e/Save parameters/Greenshot Config/assets/data_GreenShot_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Greenshot Config/assets/data_GreenShot_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cypress/e2e/Save parameters/Greenshot Config/save_params_GreenShot_config.cy.js" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/Greenshot Config/save_params_GreenShot_config.cy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cypress/e2e/Save parameters/POC Config/assets/data_Well_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/cypress/e2e/Save parameters/POC Config/assets/data_Well_config.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,16 +24,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/varazdat.melkonyan/Desktop/Save-Parameters/cypress/e2e/Save parameters/Control setup&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/Varazdat/Desktop/Automation tests",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/cypress/e2e/Save parameters/Control setup" />
@@ -66,6 +67,8 @@
       <workItem from="1669189892927" duration="12757000" />
       <workItem from="1669206151624" duration="20947000" />
       <workItem from="1669308242148" duration="3168000" />
+      <workItem from="1669374972790" duration="343000" />
+      <workItem from="1669375343566" duration="601000" />
     </task>
     <servers />
   </component>

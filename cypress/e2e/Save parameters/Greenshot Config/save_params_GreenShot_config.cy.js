@@ -133,8 +133,8 @@ describe('GreenShot Configuration', () => {
             await cy.get('input[formcontrolname="avBandpassFilterFirstCutoffFrequency"]').then((e) => changedObj.avBandpassFilterFirstCutoffFrequency = e[0].value);
             await cy.get('input[formcontrolname="avBandpassFilterSecondCutoffFrequency"]').then((e) => changedObj.avBandpassFilterSecondCutoffFrequency = e[0].value);
             //System Settings
-            await cy.get('input[formcontrolname="acousticVelocityPointingOption"').then(async (e) => {
-                if (e[0].innerHTML === "Operator Defined") {
+            await cy.get('.mat-select').eq(9).then(async (e) => {
+                if (e[0].innerText === "Operator Defined") {
                     await cy.get('input[formcontrolname="acousticVelocityPointingValue"]').then((e) => changedObj.acousticVelocityPointingValue = e[0].value);
                 } else {
                     await cy.get('input[formcontrolname="acousticVelocityPointingValue"]').click().type("Operator Defined").type('{enter}');
