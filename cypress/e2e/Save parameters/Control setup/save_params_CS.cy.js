@@ -1,7 +1,7 @@
 describe('Control setup', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "Test123";                         //Well name
+    const wellName = "Test1234";                         //Well name
     const controlMode = ["Fillage", "PIP", "Timer, On/Off", "Host"];
     let currentMode = 0;
 
