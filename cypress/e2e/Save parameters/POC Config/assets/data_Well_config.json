@@ -32,7 +32,7 @@
     "tubing_outerDiameters": [2, 4.5],
     "tubing_jointCounts": [30, 700],
     "pump_distance": [0, 20000],
-    "pump_depth": [0, 20000],
+    "pump_depth": [0, 2000],
     "well.pump.diameter":[1.75, 2],
     "well.pump.clearance": [0.03, 2],
     "well.pump.length": [2, 6],
