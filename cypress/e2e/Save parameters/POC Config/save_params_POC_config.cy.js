@@ -39,6 +39,9 @@ describe('POC Configuration', () => {
 
         //change parameters
         async function changeValues(range) {
+            if (cy.not('.expand-collapse__icon--rotate')) {
+                await cy.get('.expand-collapse__button').click();
+            }
             await cy.get('.mat-input-element').then(() => {
                 let allValues = Object.values(data[0][0].POC_Settings);
 
@@ -196,7 +199,7 @@ describe('POC Configuration', () => {
                     await cy.get('input[formcontrolname="motorRatedPower"]').then((e) => changedObj.motorRatedPower = e[0].value);
                 }
                 else {
-                    await cy.get('.mat-slide-toggle-input').scrollIntoView()
+                    await cy.get('.mat-slide-toggle-input').scrollIntoView();
                     await cy.get('.mat-slide-toggle-input').check({force: true});
                     await cy.get('input[formcontrolname="speedMax"]').then((e) => changedObj.peakWorkingSpeed = e[0].value);
                     await cy.get('input[formcontrolname="speedMin"]').then((e) => changedObj.minWorkingSpeed = e[0].value);
