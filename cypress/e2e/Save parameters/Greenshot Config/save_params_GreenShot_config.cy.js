@@ -62,25 +62,25 @@ describe('GreenShot Configuration', () => {
                 await cy.get('.mat-radio-label').eq(1).click({force: true});
                 await cy.get('.mat-raised-button').click();
                 await cy.reload();
-                await cy.get('.sis-tabs__item').contains('System Parameters').click();
+                await cy.get('.sis-tabs__item').contains('Configuration').click();
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-outer-circle').eq(0).click({force: true});
-                await cy.get('#saveSysParam').click();
+                await cy.get('#saveConfig').click();
                 await cy.reload();
-                await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
-                await cy.get('.sis-tabs__item').contains('Configuration').click();
+                await cy.get('.sis-tabs__item').contains('System Parameters').click();
                 await cy.get('.expand-collapse__label').click();
             } else if (currentMode === 2) {
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-label').eq(2).click({force: true});
                 await cy.get('.mat-raised-button').click();
                 await cy.reload();
+                await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
+                await cy.get('.sis-tabs__item').contains('Configuration').click();
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-outer-circle').eq(0).click({force: true});
                 await cy.get('.mat-raised-button').click();
                 await cy.reload();
-                await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
-                await cy.get('.sis-tabs__item').contains('Configuration').click();
+                await cy.get('.sis-tabs__item').contains('System Parameters').click();
                 await cy.get('.expand-collapse__label').click();
             }
 
