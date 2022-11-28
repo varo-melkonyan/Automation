@@ -1,9 +1,9 @@
-describe('POC Configuration', () => {
+describe('GreenShot Configuration', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "Test1234";                         //Well name
     const configMode = ["Greenshot", "Well Manager", "Greenshot and Well Manager"];
-    let currentMode = 0;
+    let currentMode = 1;
 
     let firstChange = {};
     let secondChange = {};
@@ -11,7 +11,7 @@ describe('POC Configuration', () => {
     it('POC config parameters', () => {
         let data = [];
         // get data
-        cy.fixture('../e2e/Save parameters/POC Config/assets/data_Well_config')
+        cy.fixture('../e2e/Save parameters/Greenshot Config/assets/data_GreenShot_config')
             .then(async (e) => {
                 data.push(e);
             });
@@ -20,8 +20,8 @@ describe('POC Configuration', () => {
         function commands() {
             cy.get('.well-list__group').contains(wellName).click();
             cy.wait(1000);
-            cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
-            cy.get('.sis-tabs__item').contains('Configuration').click();
+            cy.get('button[class=mat-button-toggle-button]').contains('Greenshot').click();
+            cy.get('.sis-tabs__item').contains('System Parameters').click();
             configurationCommands();
         }
 
@@ -30,10 +30,9 @@ describe('POC Configuration', () => {
                 // configMode
                 await cy.get('.expand-collapse__button').click();
                 await cy.wait(1000);
-                // await valuesInputs();
                 await changeValues(0);
-                // await cy.wait(2000);
-                // await changeValues(1);
+                await cy.wait(2000);
+                await changeValues(1);
             });
         }
 
@@ -41,44 +40,53 @@ describe('POC Configuration', () => {
         //change parameters
         async function changeValues(range) {
             await cy.get('.mat-input-element').then(() => {
-                let allValues = Object.values(data[0][0].POC_Settings);
-
-                if (configMode[currentMode] === "Greenshot") {
-                    console.log(configMode[currentMode]);
-                    cy.get('.mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (!e[0].checked) {
-                                cy.get('.mat-slide-toggle-label').click();
-                            }
-                        });
-                    cy.get('.mat-slide-toggle-input')
-                        .invoke('val', 'aria-checked')
-                        .then((e) => {
-                            if (e[0].checked) {
-                                //withoutpassword
-                                for (let i = 0; i < 3; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(allValues[i][range]);
-                                }
-                                for (let i = 4; i < 21; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(allValues[i][range]);
-                                }
-                                for (let i = 25; i < allValues.length; i++) {
-                                    cy.get('.mat-input-element').eq(i)
-                                        .clear().type(allValues[i][range]);
-                                }
-
-                            }
-                        });
+                let allValues = Object.values(data[0][0].GreenShot_Config);
+                if ((range === 1 && currentMode === 1) || (range === 1 && currentMode === 2) || (range === 0 && currentMode === 2)) {
+                    cy.get('.sis-delete-row').eq(1).click();
+                }
+                //withoutpassword
+                for (let i = 0; i < allValues.length; i++) {
+                    if (i === 3) {
+                        continue;
+                    }
+                    cy.get('.mat-input-element').eq(i)
+                        .clear({force: true}).type(allValues[i][range], {force: true});
                 }
             });
-            cy.get('#saveControl').click();
+            cy.get('#saveSysParam').click();
             cy.wait(3000);
-            cy.reload();
-            // cy.get('.mat-radio-checked').contains('GreenShot or Well manager');
-            cy.get('.mat-input-element').then(async () => {
+            await changeOPMode(range);
+        }
+
+        async function changeOPMode(range) {
+            if (currentMode === 1) {
+                await cy.get('.expand-collapse__label').click();
+                await cy.get('.mat-radio-label').eq(1).click({force: true});
+                await cy.get('.mat-raised-button').click();
+                await cy.reload();
+                await cy.get('.sis-tabs__item').contains('Configuration').click();
+                await cy.get('.expand-collapse__label').click();
+                await cy.get('.mat-radio-outer-circle').eq(0).click({force: true});
+                await cy.get('#saveConfig').click();
+                await cy.reload();
+                await cy.get('.sis-tabs__item').contains('System Parameters').click();
+                await cy.get('.expand-collapse__label').click();
+            } else if (currentMode === 2) {
+                await cy.get('.expand-collapse__label').click();
+                await cy.get('.mat-radio-label').eq(2).click({force: true});
+                await cy.get('.mat-raised-button').click();
+                await cy.reload();
+                await cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click({force: true});
+                await cy.get('.sis-tabs__item').contains('Configuration').click();
+                await cy.get('.expand-collapse__label').click();
+                await cy.get('.mat-radio-outer-circle').eq(0).click({force: true});
+                await cy.get('.mat-raised-button').click();
+                await cy.reload();
+                await cy.get('.sis-tabs__item').contains('System Parameters').click();
+                await cy.get('.expand-collapse__label').click();
+            }
+
+            await cy.get('.mat-input-element').then(async () => {
                 if (range === 0) {
                     await getValues(range, firstChange);
                 } else if (range === 1) {
@@ -88,74 +96,81 @@ describe('POC Configuration', () => {
             });
         }
 
-        async function valuesInputs(changedObj) {
+        async function getValues(range, changedObj) {
             // Well settings params
             await cy.get('input[formcontrolname="displayName"]').then((e) => changedObj.displayName = e[0].value);
             await cy.get('input[formcontrolname="latitude"]').then((e) => changedObj.latitude = e[0].value);
             await cy.get('input[formcontrolname="longitude"]').then((e) => changedObj.longitude = e[0].value);
-            // Surface Equipment
-            await cy.get('input[formcontrolname="canonicalStrokeLength"]').then((e) => changedObj.canonicalStrokeLength = e[0].value);
-            await cy.get('input[formcontrolname="stuffingBoxFriction"]').then((e) => changedObj.stuffingBoxFriction = e[0].value);
-            await cy.get('input[formcontrolname="topLoad"]').then((e) => changedObj.topLoad = e[0].value);
-            // Fluid, Gas and Environmental Properties
-            await cy.get('input[formcontrolname="oilApiGravity"]').then((e) => changedObj.oilApiGravity = e[0].value);
-            await cy.get('.mat-checkbox-input').eq(0).invoke('val', 'aria-checked').then(async (e) => {
-                if (!e[0].checked) {
-                    await cy.get('input[formcontrolname="fluidBubblingGor"]').then((e) => changedObj.fluidBubblingGor = e[0].value);
-                }
-            });
-            await cy.get('input[formcontrolname="waterSpecificGravity"]').then((e) => changedObj.waterSpecificGravity = e[0].value);
-            await cy.get('.mat-checkbox-input').eq(1).invoke('val', 'aria-checked').then(async (e) => {
-                if (!e[0].checked) {
-                    await cy.get('input[formcontrolname="fluidBubblingPressure"]').then((e) => changedObj.fluidBubblingPressure = e[0].value);
-                }
-            });
-            await cy.get('input[formcontrolname="sfWaterCut"]').then((e) => changedObj.sfWaterCut = e[0].value);
-            await cy.get('.mat-checkbox-input').eq(2).invoke('val', 'aria-checked').then(async (e) => {
-                if (!e[0].checked) {
-                    await cy.get('input[formcontrolname="oilFormationFactor"]').then((e) => changedObj.oilFormationFactor = e[0].value);
-                }
-            });
-
-            await cy.get('input[formcontrolname="fluidViscosity"]').then((e) => changedObj.fluidViscosity = e[0].value);
-            await cy.get('.mat-checkbox-input').eq(3).invoke('val', 'aria-checked').then(async (e) => {
-                if (!e[0].checked) {
-                    await cy.get('input[formcontrolname="fluidPressureGradient"]').then((e) => changedObj.fluidPressureGradient = e[0].value);
-                }
-            });
-            await cy.get('input[formcontrolname="sfGasPressure"]').then((e) => changedObj.sfGasPressure = e[0].value);
-            await cy.get('input[formcontrolname="sfFluidPressure"]').then((e) => changedObj.sfFluidPressure = e[0].value);
+            // Gas, Oil And Environment Parameters
             await cy.get('input[formcontrolname="sfTemperature"]').then((e) => changedObj.sfTemperature = e[0].value);
+            await cy.get('input[formcontrolname="specificHeatRatio"]').then((e) => changedObj.specificHeatRatio = e[0].value);
             await cy.get('input[formcontrolname="gasSpecificGravity"]').then((e) => changedObj.gasSpecificGravity = e[0].value);
+            await cy.get('input[formcontrolname="gasCompressibilityDefault"]').then((e) => changedObj.gasCompressibilityDefault = e[0].value);
+            await cy.get('input[formcontrolname="oilApiGravity"]').then((e) => changedObj.oilApiGravity = e[0].value);
             await cy.get('input[formcontrolname="atmosphericPressure"]').then((e) => changedObj.atmosphericPressure = e[0].value);
-            await cy.get('input[formcontrolname="atmosphericPressure"]').then((e) => changedObj.atmosphericPressure = e[0].value);
-            //Rods
-            await cy.get('input[formcontrolname="serviceFactor"]').then((e) => changedObj.serviceFactor = e[0].value);
-            //Tubing
-            await cy.get('.mat-checkbox-input').eq(4).invoke('val', 'aria-checked').then(async (e) => {
-                if (!e[0].checked) {
+            await cy.get('input[formcontrolname="temperatureGradient"]').then((e) => changedObj.temperatureGradient = e[0].value);
+            // Pump, Tubing and Casing parameters
+            await cy.get('input[formcontrolname="distance"]').then((e) => changedObj.distance = e[0].value);
+            await cy.get('input[formcontrolname="depth"]').then((e) => changedObj.depth = e[0].value);
+            await cy.get('input[formcontrolname="kellyBushing"]').then((e) => changedObj.kellyBushing = e[0].value);
+            await cy.get('input[formcontrolname="micDistance"]').then((e) => changedObj.micDistance = e[0].value);
+            await cy.get('.mat-checkbox-input').eq(0).invoke('val', 'aria-checked').then(async (e) => {
+                if (e[0].checked) {
+                    await cy.get('input[formcontrolname="tubingAnchorDepth"]').then((e) => changedObj.tubingAnchorDepth = e[0].value);
+                } else {
+                    await cy.get('.mat-checkbox-input').eq(0).check({force: true});
                     await cy.get('input[formcontrolname="tubingAnchorDepth"]').then((e) => changedObj.tubingAnchorDepth = e[0].value);
                 }
             });
-            //Bottom Hole Assembly (BHA)
-            await cy.get('input[formcontrolname="distance"]').then((e) => changedObj.distance = e[0].value);
-            await cy.get('input[formcontrolname="depth"]').then((e) => changedObj.depth = e[0].value);
-            await cy.get('input[formcontrolname="diameter"]').then((e) => changedObj.diameter = e[0].value);
-            await cy.get('input[formcontrolname="clearance"]').then((e) => changedObj.clearance = e[0].value);
-            await cy.get('input[formcontrolname="length"]').then((e) => changedObj.length = e[0].value);
-            //VFD
-            await cy.get('.mat-slide-toggle-input').invoke('val', 'aria-checked').then(async (e) => {
-                if (!e[0].checked) {
-                    await cy.get('input[formcontrolname="speedMax"]').then((e) => changedObj.peakWorkingSpeed = e[0].value);
-                    await cy.get('input[formcontrolname="speedMin"]').then((e) => changedObj.minWorkingSpeed = e[0].value);
-                    await cy.get('input[formcontrolname="speedIncrease"]').then((e) => changedObj.speedIncrease = e[0].value);
-                    await cy.get('input[formcontrolname="speedDecrease"]').then((e) => changedObj.speedDecrease = e[0].value);
-                    await cy.get('input[formcontrolname="startupSpeed"]').then((e) => changedObj.startUpSpeed = e[0].value);
-                    await cy.get('input[formcontrolname="deadBandRate"]').then((e) => changedObj.deadBand = e[0].value);
-                    await cy.get('input[formcontrolname="deadBandTicks"]').then((e) => changedObj.deadBandStrokes = e[0].value);
-                    await cy.get('input[formcontrolname="constantSpeed"]').then((e) => changedObj.constantSpeed = e[0].value);
-                    await cy.get('input[formcontrolname="inverterRatedPower"]').then((e) => changedObj.inverterRatedPower = e[0].value);
-                    await cy.get('input[formcontrolname="motorRatedPower"]').then((e) => changedObj.motorRatedPower = e[0].value);
+            await cy.get('.mat-input-element').eq(16).then((e) => changedObj.tubing_lengths = e[0].value);
+            await cy.get('.mat-input-element').eq(17).then((e) => changedObj.tubing_innerDiameters = e[0].value);
+            await cy.get('.mat-input-element').eq(18).then((e) => changedObj.tubing_outerDiameters = e[0].value);
+            await cy.get('.mat-input-element').eq(19).then((e) => changedObj.tubing_jointCounts = e[0].value);
+            await cy.get('.mat-input-element').eq(20).then((e) => changedObj.casing_lengths = e[0].value);
+            await cy.get('.mat-input-element').eq(21).then((e) => changedObj.casing_innerDiameters = e[0].value);
+            //Shot Settings
+            await cy.get('input[formcontrolname="gpBuildupReadyDuration"]').then((e) => changedObj.gpBuildupReadyDuration = e[0].value);
+            await cy.get('input[formcontrolname="flBuildupReadyPressureRise"]').then((e) => changedObj.flBuildupReadyPressureRise = e[0].value);
+            await cy.get('input[formcontrolname="avBuildupReadyPressureRise"]').then((e) => changedObj.avBuildupReadyPressureRise = e[0].value);
+            await cy.get('input[formcontrolname="avBandpassFilterFirstCutoffFrequency"]').then((e) => changedObj.avBandpassFilterFirstCutoffFrequency = e[0].value);
+            await cy.get('input[formcontrolname="avBandpassFilterSecondCutoffFrequency"]').then((e) => changedObj.avBandpassFilterSecondCutoffFrequency = e[0].value);
+            //System Settings
+            await cy.get('.mat-select').eq(9).then(async (e) => {
+                if (e[0].innerText === "Operator Defined") {
+                    await cy.get('input[formcontrolname="acousticVelocityPointingValue"]').then((e) => changedObj.acousticVelocityPointingValue = e[0].value);
+                } else {
+                    await cy.get('input[formcontrolname="acousticVelocityPointingValue"]').click().type("Operator Defined").type('{enter}');
+                    await cy.get('input[formcontrolname="acousticVelocityPointingValue"]').then((e) => changedObj.acousticVelocityPointingValue = e[0].value);
+                }
+            })
+            await cy.get('input[formcontrolname="acousticVelocityPointingValueDeltaRate"]').then((e) => changedObj.acousticVelocityPointingValueDeltaRate = e[0].value);
+            await cy.get('input[formcontrolname="avSegmentStartTime"]').then((e) => changedObj.avSegmentStartTime = e[0].value);
+            await cy.get('input[formcontrolname="avSegmentEndTime"]').then((e) => changedObj.avSegmentEndTime = e[0].value);
+            await cy.get('input[formcontrolname="pipDeltaWarningLevel"]').then((e) => changedObj.pipDeltaWarningLevel = e[0].value);
+            await cy.get('input[formcontrolname="flDeltaWarningLevel"]').then((e) => changedObj.flDeltaWarningLevel = e[0].value);
+            //End Device Settings
+            await cy.get('input[formcontrolname="highPressureSafetyValveSetPoint"]').then((e) => changedObj.highPressureSafetyValveSetPoint = e[0].value);
+            await cy.get('.mat-checkbox-input').eq(1).invoke('val', 'aria-checked').then(async (e) => {
+                if (e[0].checked) {
+                    await cy.get('input[formcontrolname="highPressureSafetyValveThreshold"]').then((e) => changedObj.highPressureSafetyValveThreshold = e[0].value);
+                } else {
+                    await cy.get('.mat-checkbox-input').eq(1).check({force: true});
+                    await cy.get('input[formcontrolname="highPressureSafetyValveThreshold"]').then((e) => changedObj.highPressureSafetyValveThreshold = e[0].value);
+                }
+            });
+            await cy.get('.mat-checkbox-input').eq(2).invoke('val', 'aria-checked').then(async (e) => {
+                if (e[0].checked) {
+                    await cy.get('input[formcontrolname="diffPressureSafetyValveThreshold"]').then((e) => changedObj.diffPressureSafetyValveThreshold = e[0].value);
+                } else {
+                    await cy.get('.mat-checkbox-input').eq(2).check({force: true});
+                    await cy.get('input[formcontrolname="diffPressureSafetyValveThreshold"]').then((e) => changedObj.diffPressureSafetyValveThreshold = e[0].value);
+                }
+            });
+
+
+            await cy.get('.mat-input-element').then(async () => {
+                if (range === 1) {
+                    await checkValues();
                 }
             });
         }
@@ -164,10 +179,14 @@ describe('POC Configuration', () => {
         async function checkValues() {
             for (let i = 0; i < Object.values(firstChange).length; i++) {
                 if (Object.values(firstChange)[i] === Object.values(secondChange)[i]) {
+                    cy.log(Object.values(firstChange));
+                    cy.log(Object.values(secondChange));
+                    cy.log(Object.values(secondChange)[i]);
+                    cy.log(i);
                     console.log(Object.values(firstChange));
                     console.log(Object.values(secondChange));
                     console.log(Object.values(secondChange)[i]);
-                    console.log(i)
+                    console.log(i);
                     cy.pause();
                 }
             }
@@ -182,24 +201,6 @@ describe('POC Configuration', () => {
                 console.log("Finish");
                 alert("Finish");
             }
-        }
-
-        // control setup inputs values
-        async function getValues(range, changedObj) {
-            await cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                .invoke('val', 'aria-checked')
-                .then(async (e) => {
-                    if (e[0].checked) {
-                        await vfdOn(changedObj);
-                    } else {
-                        await vfdOff(changedObj);
-                    }
-                });
-            await cy.get('input[formcontrolname="fluidFrictionRatio"]').then(async () => {
-                if (range === 1) {
-                    await checkValues();
-                }
-            });
         }
 
         //login
