@@ -53,6 +53,7 @@ describe('GreenShot Configuration', () => {
                         .clear({force: true}).type(allValues[i][range], {force: true});
                 }
             });
+            cy.pause();
             cy.get('#saveSysParam').click();
             cy.wait(3000);
             await changeOPMode(range);

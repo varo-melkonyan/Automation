@@ -3,7 +3,6 @@
     "wellName": ["Well name test", "Well test KWM-145.5"],
     "latitude": [-90, 90],
     "longitude": [-180, 180],
-    "": [],
     "sfTemperature": [40, 200],
     "gasHeatRatio": [1, 1.7],
     "gasSpecificGravity": [0.45, 2],

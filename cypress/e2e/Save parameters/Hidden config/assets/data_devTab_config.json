@@ -3,11 +3,9 @@
     "wellName": ["Well name test", "Well test KWM-145.5"],
     "latitude": [-90, 90],
     "longitude": [-180, 180],
-    "": [],
     "cellularModeRegister": [],
     "cellularRssiRegister": [],
     "cellularSinrRegister": [],
-  "algorithmsTuningParameters": {
     "badDataThreshold": [],
     "badDataPeriod": [],
     "gpStabilizationDuration": [],
@@ -19,12 +17,8 @@
     "reflectionDetectionLightingMinRatio": [],
     "reflectionDetectionLightingRelyOnAmplitude": [],
     "reflectionDetectionLightingRelyOnProximity": [],
-    "reflectionDetectionLightingRelyOnArea": []
-  },
-  "avShot" : {
-    "pulseDetectionPulseCount": [""]
-  },
-  "shotDurations": {
+    "reflectionDetectionLightingRelyOnArea": [],
+    "pulseDetectionPulseCount": [],
     "flShotBuildingDuration": [],
     "avShotBuildingDuration": [],
     "flShootingDuration": [],
@@ -33,22 +27,14 @@
     "relaxingDuration": [],
     "flRelaxingDuration": [],
     "avRelaxingDuration": [],
-    "valveDiffPressureReducingDuration": []
-  },
-  "shotstartDetection": {
+    "valveDiffPressureReducingDuration": [],
     "startDetectionSmoothingWindowDuration": [],
     "sSDiffFromMean": [],
     "startDetectionStartOffset": [],
-    "startDetectionStopOffset": []
-  },
-  "channelsettings": {
-    "acousticAcquisitionPeriod": []
-  },
-  "acousticSensor": {
+    "startDetectionStopOffset": [],
+    "acousticAcquisitionPeriod": [],
     "acousticSensorChannelADCRangeMin": [],
-    "acousticSensorChannelADCRangeMax": []
-  },
-  "algorithmSettings": {
+    "acousticSensorChannelADCRangeMax": [],
     "pdpCalculationAccuracy": [],
     "pdpCalculationStepsMax": [],
     "dimA": [],
@@ -59,21 +45,13 @@
     "dhSize": [],
     "sf2dhFourierCoefficientsCount": [],
     "stressVelocityAdjustmentCoefficient": [],
-    "strokeMinLengthRate": []
-  },
-  "physicalParameters": {
-    "strokeEndCrankTicksCount": []
-  },
-  "otherSettings": {
+    "strokeMinLengthRate": [],
+    "strokeEndCrankTicksCount": [],
     "markedStrokeAdjacencyCount": [],
-    "markedStrokeStandardPeriod": []
-  },
-  "startupBuzzer/LED": {
+    "markedStrokeStandardPeriod": [],
     "buzzingDuration": [],
     "startingTimeout": [],
-    "stoppingTimeout": []
-  },
-  "inclinometer&LoadCell&Crank": {
+    "stoppingTimeout": [],
     "inclinometerChannelMinValue": [],
     "inclinometerChannelMaxValue": [],
     "loadCellChannelADCRangeMin": [],
