@@ -1,6 +1,6 @@
 [{
   "POC_Settings": {
-    "wellName": ["Well name test cypress", "Well test KWM-145.5 cypress"],
+    "wellName": ["Well name test cypress", "Update test"],
     "latitude": [-90, 90],
     "longitude": [-180, 180],
     "canonicalStrokeLength": [0, 500],
