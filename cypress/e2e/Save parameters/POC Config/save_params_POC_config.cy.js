@@ -1,7 +1,7 @@
 describe('POC Configuration', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "Test1234";                         //Well name
+    const wellName = "Update test";                         //Well name
     const configMode = ["Greenshot", "Well Manager"];
     let currentMode = 0;
 
@@ -75,7 +75,7 @@ describe('POC Configuration', () => {
             if (currentMode === 0) {
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-label').eq(0).click({force: true});
-                await cy.get('.mat-raised-button').click();
+                await cy.get('.mat-raised-button').eq(0).click();
                 await cy.reload();
                 await cy.get('.sis-tabs__item').contains('System Parameters').click();
                 await cy.get('.expand-collapse__label').click();
@@ -88,7 +88,7 @@ describe('POC Configuration', () => {
             } else if (currentMode === 1) {
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-label').eq(1).click({force: true});
-                await cy.get('.mat-raised-button').click();
+                await cy.get('.mat-raised-button').eq(0).click();
                 await cy.reload();
                 await cy.get('.expand-collapse__label').click();
                 await cy.get('.mat-radio-outer-circle').eq(2).click({force: true});
@@ -266,6 +266,7 @@ describe('POC Configuration', () => {
                 loginPage();
                 cy.wait(3000);
                 cy.get('body').type('{shift}{ctrl}');
+                cy.get('.devMode .ng-valid').clear().type('ws://52.179.122.28:3030/?appVersion=v5.4&accessToken=eyJraWQiOiJBZGNjMnVZMlRGT1Y4dXViaGE1Q2dIX0RmbnZGd3VXbk95Z3ZKQjV5NWtvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULnVLQnVoS3NqYnVSRXBZNGR4X1B4WlNqWHN1R3ljMExja3dQUW9iVkNycmMiLCJpc3MiOiJodHRwczovL2F1dG9tYXRpb24ud2VsbHdvcnhlbmVyZ3kuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTY3MDQxNDkzNywiZXhwIjoxNjcwNTAxMzM3LCJjaWQiOiIwb2ExaWk1c3A4QVQ2QUNVZjM1NyIsInVpZCI6IjAwdWxvZnEzYWo3TmtOMENGMzU3Iiwic2NwIjpbIm9wZW5pZCJdLCJhdXRoX3RpbWUiOjE2NzA0MDU1NjUsInN1YiI6InZhcmF6ZGF0LmdtQG92YWt0ZWNobm9sb2dpZXMuY29tIiwiZmlyc3ROYW1lIjoiVmFyYXpkYXQiLCJsYXN0TmFtZSI6Ik1lbGtvbnlhbiIsImdyb3VwcyI6WyJPeHkiLCJFdmVyeW9uZSIsIlRlc3QiLCJUZXN0IEdyb3VwIl19.GR44NhnXKrNBvuGqsbMIsYNwZktffUlacXn2DNmroeow2P-QFAAynUHazC_zmRsMtgfyvW227QawRLd3yrtaeo9iejuEfrjlKSw_r43oHXgZCmxuesoU0OhDnsm_u50bdgjILlfJ-RlkW1XuQDsMoUExmhIoP78bGC94kPXfqXALp44vFSiLsZ2k7oUKSly--F4wAkrIqpHk4dmSI418e7gAQH-W79zJVoUGm34Zk85MRxSgdARqUwag4KWbMk7QAsycHw4ixYYFhW6X4MRvdHr3eIxtCuTOigaafJM6aOzPu56MDPtQ-J2DsPC1uFTJhKM7BeN49F1EBFB00ThKdg&', {force: true})
                 cy.get('.devMode').contains('Open Sesame').click();
                 commands();
             } else {
@@ -276,6 +277,7 @@ describe('POC Configuration', () => {
                 loginPage();
                 cy.wait(3000);
                 cy.get('body').type('{shift}{ctrl}');
+                cy.get('.devMode .ng-valid').clear().type('ws://52.179.122.28:3030/?appVersion=v5.4&accessToken=eyJraWQiOiJBZGNjMnVZMlRGT1Y4dXViaGE1Q2dIX0RmbnZGd3VXbk95Z3ZKQjV5NWtvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULnVLQnVoS3NqYnVSRXBZNGR4X1B4WlNqWHN1R3ljMExja3dQUW9iVkNycmMiLCJpc3MiOiJodHRwczovL2F1dG9tYXRpb24ud2VsbHdvcnhlbmVyZ3kuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTY3MDQxNDkzNywiZXhwIjoxNjcwNTAxMzM3LCJjaWQiOiIwb2ExaWk1c3A4QVQ2QUNVZjM1NyIsInVpZCI6IjAwdWxvZnEzYWo3TmtOMENGMzU3Iiwic2NwIjpbIm9wZW5pZCJdLCJhdXRoX3RpbWUiOjE2NzA0MDU1NjUsInN1YiI6InZhcmF6ZGF0LmdtQG92YWt0ZWNobm9sb2dpZXMuY29tIiwiZmlyc3ROYW1lIjoiVmFyYXpkYXQiLCJsYXN0TmFtZSI6Ik1lbGtvbnlhbiIsImdyb3VwcyI6WyJPeHkiLCJFdmVyeW9uZSIsIlRlc3QiLCJUZXN0IEdyb3VwIl19.GR44NhnXKrNBvuGqsbMIsYNwZktffUlacXn2DNmroeow2P-QFAAynUHazC_zmRsMtgfyvW227QawRLd3yrtaeo9iejuEfrjlKSw_r43oHXgZCmxuesoU0OhDnsm_u50bdgjILlfJ-RlkW1XuQDsMoUExmhIoP78bGC94kPXfqXALp44vFSiLsZ2k7oUKSly--F4wAkrIqpHk4dmSI418e7gAQH-W79zJVoUGm34Zk85MRxSgdARqUwag4KWbMk7QAsycHw4ixYYFhW6X4MRvdHr3eIxtCuTOigaafJM6aOzPu56MDPtQ-J2DsPC1uFTJhKM7BeN49F1EBFB00ThKdg&', {force: true})
                 cy.get('.devMode').contains('Open Sesame').click();
                 commands();
             }
