@@ -1,7 +1,7 @@
 describe('Control setup', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "Test1234";                         //Well name
+    const wellName = "Well 135";                         //Well name
     const controlMode = ["Fillage", "PIP", "Timer, On/Off", "Host"];
     let currentMode = 0;
 
@@ -405,7 +405,7 @@ describe('Control setup', () => {
 
         cy.viewport(1920, 1080);
         cy.clearCookies();
-        cy.visit('http://104.211.19.125:8181/');
+        cy.visit('http://104.211.19.125:8282/');
         cy.clearCookies();
         cy.wait(2000);
         cy.url().then((url) => {
@@ -413,8 +413,8 @@ describe('Control setup', () => {
             if ((url === 'https://automation.wellworxenergy.com/')) {
                 loginPage();
                 cy.wait(3000);
-                cy.get('body').type('{shift}{ctrl}');
-                cy.get('.devMode').contains('Open Sesame').click();
+                // cy.get('body').type('{shift}{ctrl}');
+                // cy.get('.devMode').contains('Open Sesame').click();
                 commands();
             } else {
                 cy.get('.sis-account__button').click();
@@ -423,8 +423,8 @@ describe('Control setup', () => {
                 cy.url().should("eq", "https://automation.wellworxenergy.com/");
                 loginPage();
                 cy.wait(3000);
-                cy.get('body').type('{shift}{ctrl}');
-                cy.get('.devMode').contains('Open Sesame').click();
+                // cy.get('body').type('{shift}{ctrl}');
+                // cy.get('.devMode').contains('Open Sesame').click();
                 commands();
             }
         })
