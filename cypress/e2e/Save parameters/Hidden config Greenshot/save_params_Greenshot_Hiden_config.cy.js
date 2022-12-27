@@ -22,7 +22,7 @@ describe('GreenShot Hidden Configuration', () => {
             cy.url().then((e) => {
                 const lastIndexOfSpace = e.lastIndexOf('/');
                 cy.visit(e.substring(0, lastIndexOfSpace) + '/developer');
-            })
+            });
             configurationCommands();
         }
 
