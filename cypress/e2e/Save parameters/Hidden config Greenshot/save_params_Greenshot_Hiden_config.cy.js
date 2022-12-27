@@ -21,7 +21,7 @@ describe('GreenShot Hidden Configuration', () => {
             cy.get('button[class=mat-button-toggle-button]').contains('Greenshot').click();
             cy.url().then((e) => {
                 const lastIndexOfSpace = e.lastIndexOf('/');
-                cy.visit(e.substring(0, lastIndexOfSpace) + '/developer')
+                cy.visit(e.substring(0, lastIndexOfSpace) + '/developer');
             })
             configurationCommands();
         }

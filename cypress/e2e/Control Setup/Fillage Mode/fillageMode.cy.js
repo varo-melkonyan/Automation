@@ -3,18 +3,22 @@ describe('Well status', () => {
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "New Well 135";                         //Well name
 
-    it('Check Well start / stop', () => {
+    it('Check the work of Fillage Mode', () => {
         // test commands
 
         function commands() {
             cy.get('.well-list__group').contains(wellName).click();
             cy.wait(1000);
             cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
-            cy.get('.sis-tabs__item').contains('Well Status').click();
-            wellStatusCommands();
+            cy.url().then((e) => {
+                const lastIndexOfSpace = e.lastIndexOf('/');
+                cy.visit(e.substring(0, lastIndexOfSpace) + '/developer');
+            })
+            cy.get('.sis-tabs__item').contains('Control Setup').click();
+            controlSetupCommands();
         }
 
-        function wellStatusCommands() {
+        function controlSetupCommands() {
             cy.get('body').then(() => {
                 cy.get('.footer-status__value').eq(2).as('wellState');
                 cy.get("@wellState").then((e) => {
