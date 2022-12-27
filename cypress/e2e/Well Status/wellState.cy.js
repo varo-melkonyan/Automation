@@ -1,9 +1,9 @@
-import { WsService } from 'assets/ws.service.ts';
+import 'cypress-wait-until';
+
 describe('Well status', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "New Well 135";                         //Well name
-    const svc: WsService;
 
     it('Check Well start / stop', () => {
         // test commands
@@ -16,23 +16,65 @@ describe('Well status', () => {
             wellStatusCommands();
         }
 
-        async function wellStatusCommands() {
-            cy.get('body').then(async () => {
+        function wellStatusCommands() {
+            cy.get('body').then(() => {
                 cy.get('.footer-status__value').eq(2).as('wellState');
-                // cy.wait("@wellState").then((e) => {
-                //     if (e.innerHTML === "Running") {
-                //         console.log(true)
-                //     }
-                // })
-                cy
-                    .window()
-                    .then(({ app }) => {
-                        console.log(app);
-                    });
+                cy.get("@wellState").then((e) => {
+                    if (e[0].innerText != "Running" || e[0].innerText != "Operator Stopping" || e[0].innerText != "Stopping") {
+                        cy.get('.gs-card-buttons__start').click();
+                        cy.get("@wellState", {timeout: 60000}).should('have.text', "Running").then(() => {
+                            cy.get('.gs-card-buttons__stop').click();
+                        })
+                    }
+                })
+                cy.get("@wellState", {timeout: 80000}).should('have.text', "Operator Stopped");
+                cy.get('.sis-tabs__item').contains('I/O').click();
+                cy.get('.sys-accordion__title').eq(2).click();
+                cy.wait(1000);
+                cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "0");
+                cy.get('.sys-accordion__title').eq(0).click();
+                cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
+                    let oldValue;
+                    oldValue = e[0].innerText;
+                    cy.wait(5000);
+                    if (oldValue >= e[0].innerText) {
+                        cy.log(true);
+                    }
+                    else {
+                        cy.pause();
+                    }
+                });
+                cy.get('.sis-tabs__item').contains('Well Status').click();
+                cy.wait(2000);
+                checkRunning();
             });
         }
 
-        //check state
+        function checkRunning() {
+            cy.get('body').then(async () => {
+                cy.get('.footer-status__value').eq(2).as('wellState');
+                cy.get("@wellState").then((e) => {
+                    if (e[0].innerText != "Operator Stopped" || e[0].innerText != "Stopped"
+                        || e[0].innerText != "Operator Stopping" || e[0].innerText != "Stopping") {
+                        cy.get("@wellState", {timeout: 80000}).should('have.text', "Operator Stopped").then(() => {
+                            cy.get('.gs-card-buttons__start').click();
+                        })
+                    }
+                })
+                cy.get("@wellState", {timeout: 60000}).should('have.text', "Running");
+                cy.get('.sis-tabs__item').contains('I/O').click();
+                cy.get('.sys-accordion__title').eq(2).click();
+                cy.wait(1000);
+                cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "1");
+                cy.get('.sys-accordion__title').eq(0).click();
+                cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
+                    let oldValue;
+                    oldValue = e[0].innerText;
+                    cy.wait(5000);
+                    cy.get('.sys-accordion__grid-item--value').eq(0).should('not.have.text', oldValue);
+                });
+            });
+        }
 
 
         //login

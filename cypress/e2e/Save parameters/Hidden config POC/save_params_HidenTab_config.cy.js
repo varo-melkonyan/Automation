@@ -9,7 +9,7 @@ describe('GreenShot Configuration', () => {
     it('POC config parameters', () => {
         let data = [];
         // get data
-        cy.fixture('../e2e/Save parameters/Hidden config/assets/data_devTab_config')
+        cy.fixture('../e2e/Save parameters/Hidden config Greenshot/assets/data_devTab_config')
             .then(async (e) => {
                 data.push(e);
             });

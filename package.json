@@ -134,6 +134,7 @@
     "css-what": "^6.1.0",
     "cssdb": "^7.0.1",
     "cssesc": "^3.0.0",
+    "cypress-wait-until": "^1.7.2",
     "dashdash": "^1.14.1",
     "dayjs": "^1.11.5",
     "debug": "^4.3.4",

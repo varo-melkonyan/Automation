@@ -44,11 +44,7 @@ describe('GreenShot Configuration', () => {
                 if ((range === 1 && currentMode === 1) || (range === 1 && currentMode === 2) || (range === 0 && currentMode === 2)) {
                     cy.get('.sis-delete-row').eq(1).click();
                 }
-                //withoutpassword
                 for (let i = 0; i < allValues.length; i++) {
-                    if (i === 3) {
-                        continue;
-                    }
                     cy.get('.mat-input-element').eq(i)
                         .clear({force: true}).type(allValues[i][range], {force: true});
                 }

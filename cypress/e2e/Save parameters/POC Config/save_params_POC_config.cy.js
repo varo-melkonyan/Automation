@@ -55,11 +55,7 @@ describe('POC Configuration', () => {
                     .invoke('val', 'aria-checked')
                     .then((e) => {
                         if (e[0].checked) {
-                            //withoutpassword
                             for (let i = 0; i < allValues.length; i++) {
-                                if (i === 3) {
-                                    continue;
-                                }
                                 cy.get('.mat-input-element').eq(i)
                                     .clear({force: true}).type(allValues[i][range], {force: true});
                             }
