@@ -3,10 +3,13 @@ describe('Well status', () => {
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "New Well 135";                         //Well name
 
-    const loadSetPoint = 0;
+    const loadSetPoint = 14260;
     const violation = 1;
     const retries = 1;
     const retriesTime = "01";
+
+    const secondRetries = 3;
+    const secondRetriesTime = 10;
 
     it('Check the work of Fillage Mode', () => {
         // test commands
@@ -19,54 +22,35 @@ describe('Well status', () => {
         }
 
         async function malfunctionSetupCommands() {
-            await cy.get('.mat-select').eq(0).click();
-            await cy.get('.mat-option-text').contains("Fillage").click();
-            await cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                .invoke('val', 'aria-checked')
-                .then((e) => {
-                    if (e[0].checked) {
-                        cy.get('.mat-slide-toggle').eq(1).click();
-                        cy.get('.mat-input-element').eq(0).clear().type(fillageSetPoint);
-                        cy.get('.mat-input-element').eq(1).clear().type(allowedStroke);
-                        cy.get('.mat-input-element').eq(2).clear().type(startUpStroke);
-                        cy.get('.mat-select').eq(2).click().type('02').type('{enter}');
-                        cy.get('#saveControl').click();
-                        cy.wait(3000);
-                        cy.reload();
-                        cy.wait(4000);
-                        onOffModbusUnit(1);
-                        checkStatus();
-                    } else {
-                        cy.get('.mat-input-element').eq(0).clear().type(fillageSetPoint);
-                        cy.get('.mat-input-element').eq(1).clear().type(allowedStroke);
-                        cy.get('.mat-input-element').eq(2).clear().type(startUpStroke);
-                        cy.get('.mat-select').eq(2).click().type('02').type('{enter}');
-                        cy.get('#saveControl').click();
-                        cy.wait(3000);
-                        cy.reload();
-                        cy.wait(4000);
-                        onOffModbusUnit(1);
-                        checkStatus();
-                    }
-                })
-            checkSecondary();
+            await cy.get('.mat-checkbox-input').eq(0).click({force: true});
+            await cy.get('.mat-input-element').eq(0).clear().type(loadSetPoint);
+            await cy.get('.mat-input-element').eq(1).clear().type(violation);
+            await cy.get('.mat-input-element').eq(2).clear().type(retries);
+            await cy.get('.mat-input-element').eq(4).clear().type(retriesTime);
+            await cy.get('#saveMalf').click();
+            await cy.wait(3000);
+            await cy.reload();
+            await cy.wait(4000);
+            await onOffModbusUnit(1);
+            await checkStatus();
+            // await checkSecondary();
         }
 
         function checkStatus() {
-            cy.get('body').then(() => {
+            cy.get('body').then(async () => {
                 cy.get('.footer-status__value').eq(2).as('wellState');
                 cy.get('.footer-status__value').eq(2).then((e) => {
                     if (e[0].innerText != "Stopped") {
                         cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
                     }
                 })
-                cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
-                cy.get('.sis-tabs__item').contains('I/O').click();
-                cy.get('.sys-accordion__title').eq(2).click();
-                cy.wait(1000);
-                cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "0");
-                cy.get('.sys-accordion__title').eq(0).click();
-                cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
+                await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
+                await cy.get('.sis-tabs__item').contains('I/O').click();
+                await cy.get('.sys-accordion__title').eq(2).click();
+                await cy.wait(1000);
+                await cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "0");
+                await cy.get('.sys-accordion__title').eq(0).click();
+                await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
                     let oldValue;
                     oldValue = e[0].innerText;
                     cy.wait(5000);
@@ -76,13 +60,8 @@ describe('Well status', () => {
                         cy.pause();
                     }
                 });
-                cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-                cy.wait(2000);
-                cy.get('.header-buttons__start').click();
-                cy.get('.mat-select').eq(0).click();
-                cy.get('.mat-option-text').contains("Host").click();
-                cy.get('#saveControl').click();
-                cy.wait(3000);
+                await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
+                await cy.get(".malf-current-retries", {timeout: parseInt(retriesTime) + 16000}).eq(0).should('not.have.text', "0");
             });
         }
 
