@@ -9,7 +9,7 @@ describe('Well status', () => {
     const retriesTime = "01";
 
     const secondRetries = 3;
-    const secondRetriesTime = 10;
+    const secondRetriesTime = 2;
 
     it('Check the work of Fillage Mode', () => {
         // test commands
@@ -31,20 +31,19 @@ describe('Well status', () => {
             await cy.wait(3000);
             await cy.reload();
             await cy.wait(4000);
-            await onOffModbusUnit(1);
             await checkStatus();
-            // await checkSecondary();
         }
 
         function checkStatus() {
             cy.get('body').then(async () => {
-                cy.get('.footer-status__value').eq(2).as('wellState');
-                cy.get('.footer-status__value').eq(2).then((e) => {
-                    if (e[0].innerText != "Stopped") {
-                        cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
+                await cy.get('.footer-status__value').eq(2).as('wellState');
+                await cy.get('.footer-status__value').eq(2).then(async (e) => {
+                    if (e[0].innerText !== "Stopped") {
+                        await cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
                     }
                 })
                 await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Max Load");
                 await cy.get('.sis-tabs__item').contains('I/O').click();
                 await cy.get('.sys-accordion__title').eq(2).click();
                 await cy.wait(1000);
@@ -62,33 +61,59 @@ describe('Well status', () => {
                 });
                 await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
                 await cy.get(".malf-current-retries", {timeout: parseInt(retriesTime) + 16000}).eq(0).should('not.have.text', "0");
+                await cy.get('.mat-checkbox-input').eq(0).click({force: true});
+                await cy.get('#saveMalf').click();
+                await cy.wait(3000);
+                await cy.get('.malfunction-button').click();
+                await checkSecondary();
             });
         }
 
         function checkSecondary() {
-            onOffModbusUnit(0);
-            cy.get('.mat-select').eq(0).click();
-            cy.get('.mat-option-text').contains("Fillage").click();
-            cy.wait(3000);
-            cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
-                .invoke('val', 'aria-checked')
-                .then((e) => {
-                    if (!e[0].checked) {
-                        cy.get('.mat-slide-toggle').eq(0).click();
-                        cy.get('.mat-input-element').eq(0).clear().type(fillageSetPoint);
-                        cy.get('.mat-input-element').eq(1).clear().type(allowedStroke);
-                        cy.get('.mat-input-element').eq(2).clear().type(startUpStroke);
-                        cy.get('.mat-select').eq(2).click().type('02').type('{enter}');
-                        cy.get('.mat-slide-toggle').eq(0).click();
-                        cy.get('.mat-input-element').eq(3).clear().type(secondaryFillageSetPoint);
-                        cy.get('#saveControl').click();
-                        cy.wait(3000);
-                        cy.reload();
-                        cy.wait(4000);
-                        onOffModbusUnit(1);
-                        checkStatus();
+            cy.get('body').then(async () => {
+                await cy.get('.mat-checkbox-input').eq(0).click({force: true});
+                await cy.get('.mat-input-element').eq(0).clear().type(loadSetPoint);
+                await cy.get('.mat-input-element').eq(1).clear().type(violation);
+                await cy.get('.mat-input-element').eq(2).clear().type(secondRetries);
+                await cy.get('.mat-input-element').eq(4).clear().type(secondRetriesTime);
+                await cy.get('#saveMalf').click();
+                await cy.wait(3000);
+                await cy.reload();
+                await cy.wait(2000);
+                await cy.get('.footer-status__value').eq(2).as('wellState');
+                await cy.get('.footer-status__value').eq(2).then((e) => {
+                    if (e[0].innerText !== "Stopped") {
+                        cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
                     }
                 })
+                await cy.get("@wellState", {timeout: 1820000}).should('have.text', "Stopped");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Max Load Violation");
+                await cy.get('.sis-tabs__item').contains('I/O').click();
+                await cy.get('.sys-accordion__title').eq(2).click();
+                await cy.wait(1000);
+                await cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "0");
+                await cy.get('.sys-accordion__title').eq(0).click();
+                await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
+                    let oldValue;
+                    oldValue = e[0].innerText;
+                    cy.wait(5000);
+                    if (oldValue >= e[0].innerText) {
+                        cy.log(true);
+                    } else {
+                        cy.pause();
+                    }
+                });
+                await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
+                await cy.get('.malf-current-retries').eq(0).as('malfRetries');
+                await cy.get("@malfRetries", {timeout: (secondRetriesTime * 60000 * secondRetries)}).should('have.text', secondRetries);
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Max Load");
+                await onOffModbusUnit(1);
+                await cy.wait(2000);
+                await cy.get('.mat-checkbox-input').eq(0).click({force: true});
+                await cy.get('#saveMalf').click();
+                await cy.wait(3000);
+                await cy.get('.malfunction-button').click();
+            });
         }
 
         function onOffModbusUnit(checkBox) {
