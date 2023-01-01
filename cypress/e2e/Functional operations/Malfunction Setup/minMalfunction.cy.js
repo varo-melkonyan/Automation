@@ -1,9 +1,9 @@
-describe('Maximum Load', () => {
+describe('Minimum Load', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "New Well 135";                         //Well name
 
-    const loadSetPoint = 14260;
+    const loadSetPoint = 22260;
     const violation = 1;
     const retries = 1;
     const retriesTime = "01";
@@ -11,7 +11,7 @@ describe('Maximum Load', () => {
     const secondRetries = 3;
     const secondRetriesTime = 2;
 
-    it('Check the work of Maximum Load Malfunction', () => {
+    it('Check the work of Minimum Load Malfunction', () => {
         // test commands
         function commands() {
             cy.get('.well-list__group').contains(wellName).click();
@@ -22,11 +22,11 @@ describe('Maximum Load', () => {
         }
 
         async function malfunctionSetupCommands() {
-            await cy.get('.mat-checkbox-input').eq(0).click({force: true});
-            await cy.get('.mat-input-element').eq(0).clear().type(loadSetPoint);
-            await cy.get('.mat-input-element').eq(1).clear().type(violation);
-            await cy.get('.mat-input-element').eq(2).clear().type(retries);
-            await cy.get('.mat-input-element').eq(4).clear().type(retriesTime);
+            await cy.get('.mat-checkbox-input').eq(1).click({force: true});
+            await cy.get('.mat-input-element').eq(5).clear().type(loadSetPoint);
+            await cy.get('.mat-input-element').eq(6).clear().type(violation);
+            await cy.get('.mat-input-element').eq(7).clear().type(retries);
+            await cy.get('.mat-input-element').eq(9).clear().type(retriesTime);
             await cy.get('#saveMalf').click();
             await cy.wait(3000);
             await cy.reload();
@@ -43,7 +43,7 @@ describe('Maximum Load', () => {
                     }
                 })
                 await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
-                await cy.get(".footer-status__value").eq(4).should('have.text', "Max Load");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Min Load");
                 await cy.get('.sis-tabs__item').contains('I/O').click();
                 await cy.get('.sys-accordion__title').eq(2).click();
                 await cy.wait(1000);
@@ -60,8 +60,8 @@ describe('Maximum Load', () => {
                     }
                 });
                 await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-                await cy.get(".malf-current-retries", {timeout: parseInt(retriesTime) + 16000}).eq(0).should('not.have.text', "0");
-                await cy.get('.mat-checkbox-input').eq(0).click({force: true});
+                await cy.get(".malf-current-retries", {timeout: parseInt(retriesTime) + 16000}).eq(1).should('not.have.text', "0");
+                await cy.get('.mat-checkbox-input').eq(1).click({force: true});
                 await cy.get('#saveMalf').click();
                 await cy.wait(3000);
                 await cy.get('.malfunction-button').click({force: true});
@@ -71,11 +71,11 @@ describe('Maximum Load', () => {
 
         function checkSecondary() {
             cy.get('body').then(async () => {
-                await cy.get('.mat-checkbox-input').eq(0).click({force: true});
-                await cy.get('.mat-input-element').eq(0).clear().type(loadSetPoint);
-                await cy.get('.mat-input-element').eq(1).clear().type(violation);
-                await cy.get('.mat-input-element').eq(2).clear().type(secondRetries);
-                await cy.get('.mat-input-element').eq(4).clear().type(secondRetriesTime);
+                await cy.get('.mat-checkbox-input').eq(1).click({force: true});
+                await cy.get('.mat-input-element').eq(5).clear().type(loadSetPoint);
+                await cy.get('.mat-input-element').eq(6).clear().type(violation);
+                await cy.get('.mat-input-element').eq(7).clear().type(secondRetries);
+                await cy.get('.mat-input-element').eq(9).clear().type(secondRetriesTime);
                 await cy.get('#saveMalf').click();
                 await cy.wait(3000);
                 await cy.reload();
@@ -87,7 +87,7 @@ describe('Maximum Load', () => {
                     }
                 })
                 await cy.get("@wellState", {timeout: 1820000}).should('have.text', "Stopped");
-                await cy.get(".footer-status__value").eq(4).should('have.text', "Max Load Violation");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Min Load Violation");
                 await cy.get('.sis-tabs__item').contains('I/O').click();
                 await cy.get('.sys-accordion__title').eq(2).click();
                 await cy.wait(1000);
@@ -104,12 +104,12 @@ describe('Maximum Load', () => {
                     }
                 });
                 await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-                await cy.get('.malf-current-retries').eq(0).as('malfRetries');
+                await cy.get('.malf-current-retries').eq(1).as('malfRetries');
                 await cy.get("@malfRetries", {timeout: (secondRetriesTime * 60000 * secondRetries)}).should('have.text', secondRetries);
-                await cy.get(".footer-status__value").eq(4).should('have.text', "Max Load");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Min Load");
                 await onOffModbusUnit(1);
                 await cy.wait(2000);
-                await cy.get('.mat-checkbox-input').eq(0).click({force: true});
+                await cy.get('.mat-checkbox-input').eq(1).click({force: true});
                 await cy.get('#saveMalf').click();
                 await cy.wait(3000);
                 await cy.get('.malfunction-button').click({force: true});
