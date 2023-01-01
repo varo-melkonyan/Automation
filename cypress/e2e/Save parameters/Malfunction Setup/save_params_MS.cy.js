@@ -112,7 +112,7 @@ describe('Malfunction setup', () => {
         }
 
         async function setCustomMalf() {
-            await cy.get('.mat-checkbox-input').as('checkboxes').check({force: true})
+            await cy.get('.mat-checkbox-input').as('checkboxes').check({force: true});
             await cy.get('.sis-tabs__item').contains('I/O').click();
 
             //add new custom analog

@@ -1,10 +1,9 @@
-describe('Malfunction Point', () => {
+describe('Custom Malfunction', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "New Well 135";                         //Well name
 
-    const loadSetPoint = 25354;
-    const positionPoint = 21;
+    const loadSetPoint = 132160;
     const violation = 1;
     const retries = 1;
     const retriesTime = "01";
@@ -12,7 +11,7 @@ describe('Malfunction Point', () => {
     const secondRetries = 3;
     const secondRetriesTime = 2;
 
-    it('Check the work of Malfunction Point Malfunction', () => {
+    it('Check the work of Custom Malfunction', () => {
         // test commands
         function commands() {
             cy.get('.well-list__group').contains(wellName).click();
@@ -23,9 +22,9 @@ describe('Malfunction Point', () => {
         }
 
         async function malfunctionSetupCommands() {
-            await cy.get('.mat-checkbox-input').eq(2).click({force: true});
+            await setCustomMalf();
+            await cy.get('.mat-checkbox-input').eq(3).click({force: true});
             await cy.get('.mat-input-element').eq(10).clear().type(loadSetPoint);
-            await cy.get('.mat-input-element').eq(11).clear().type(positionPoint);
             await cy.get('.mat-input-element').eq(12).clear().type(violation);
             await cy.get('.mat-input-element').eq(13).clear().type(retries);
             await cy.get('.mat-input-element').eq(15).clear().type(retriesTime);
@@ -36,6 +35,49 @@ describe('Malfunction Point', () => {
             await checkStatus();
         }
 
+        async function setCustomMalf() {
+            await cy.get('.sis-tabs__item').contains('I/O').click();
+
+            //add new custom analog
+            await cy.get('.sys-accordion__header').eq(1).contains(' + Add New ').click();
+            await cy.get('.mat-checkbox-input').check({force: true});
+            await cy.get('input[formcontrolname="name"]').clear().type("Custom Analog");
+            await cy.get('.mat-select').eq(0).click().get('.mat-option').contains("Module SYNC 1").click();
+            await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("AO 01").click();
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("0-10V").click();
+            await cy.get('.mat-select').eq(3).click().get('.mat-option').contains("Hz").click();
+            await cy.get('input[formcontrolname="y1"]').clear().type(0);
+            await cy.get('input[formcontrolname="y2"]').clear().type(60);
+            await cy.get('.io-add-malf').click();
+            await cy.get('.mat-checkbox-input').eq(1).check({force: true});
+            await cy.get('.mat-select').eq(4).click().get('.mat-option').contains("Min").click();
+            await cy.get('input[formcontrolname="value"]').clear().type(20);
+            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(2);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(4);
+            await cy.get('.mat-input-element').eq(7).clear().type(1);
+            await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.wait(2000);
+
+            //add new custom digital
+            await cy.get('.sys-accordion__header').eq(2).contains(' + Add New ').click();
+            await cy.get('.mat-checkbox-input').check({force: true});
+            await cy.get('input[formcontrolname="name"]').clear().type("Custom Digital");
+            await cy.get('.mat-select').eq(0).click().get('.mat-option').contains("Module 8DI/8DO").click();
+            await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("DO 04").click();
+            await cy.get('.io-add-malf').click();
+            await cy.get('.mat-checkbox-input').eq(1).check({force: true});
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("True (closed)").click();
+            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(1);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(3);
+            await cy.get('.mat-input-element').eq(4).clear().type(1);
+            await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.wait(2000);
+
+            await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
+        }
+        
         function checkStatus() {
             cy.get('body').then(async () => {
                 await cy.get('.footer-status__value').eq(2).as('wellState');
@@ -45,7 +87,7 @@ describe('Malfunction Point', () => {
                     }
                 })
                 await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
-                await cy.get(".footer-status__value").eq(4).should('have.text', "Surface Point");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Min Fluid Load");
                 await cy.get('.sis-tabs__item').contains('I/O').click();
                 await cy.get('.sys-accordion__title').eq(2).click();
                 await cy.wait(1000);
@@ -63,7 +105,7 @@ describe('Malfunction Point', () => {
                 });
                 await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
                 await cy.get(".malf-current-retries", {timeout: parseInt(retriesTime) + 16000}).eq(1).should('not.have.text', "0");
-                await cy.get('.mat-checkbox-input').eq(2).click({force: true});
+                await cy.get('.mat-checkbox-input').eq(3).click({force: true});
                 await cy.get('#saveMalf').click();
                 await cy.wait(3000);
                 await cy.get('.malfunction-button').click({force: true});
@@ -73,7 +115,7 @@ describe('Malfunction Point', () => {
 
         function checkSecondary() {
             cy.get('body').then(async () => {
-                await cy.get('.mat-checkbox-input').eq(2).click({force: true});
+                await cy.get('.mat-checkbox-input').eq(3).click({force: true});
                 await cy.get('.mat-input-element').eq(10).clear().type(loadSetPoint);
                 await cy.get('.mat-input-element').eq(11).clear().type(positionPoint);
                 await cy.get('.mat-input-element').eq(12).clear().type(violation);
@@ -90,7 +132,7 @@ describe('Malfunction Point', () => {
                     }
                 })
                 await cy.get("@wellState", {timeout: 1820000}).should('have.text', "Stopped");
-                await cy.get(".footer-status__value").eq(4).should('have.text', "Surface Point Violation");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Min Fluid Load Violation");
                 await cy.get('.sis-tabs__item').contains('I/O').click();
                 await cy.get('.sys-accordion__title').eq(2).click();
                 await cy.wait(1000);
@@ -109,10 +151,10 @@ describe('Malfunction Point', () => {
                 await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
                 await cy.get('.malf-current-retries').eq(1).as('malfRetries');
                 await cy.get("@malfRetries", {timeout: (secondRetriesTime * 60000 * secondRetries)}).should('have.text', secondRetries);
-                await cy.get(".footer-status__value").eq(4).should('have.text', "Surface Point");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Min Fluid Load");
                 await onOffModbusUnit(1);
                 await cy.wait(2000);
-                await cy.get('.mat-checkbox-input').eq(2).click({force: true});
+                await cy.get('.mat-checkbox-input').eq(3).click({force: true});
                 await cy.get('#saveMalf').click();
                 await cy.wait(3000);
                 await cy.get('.malfunction-button').click({force: true});

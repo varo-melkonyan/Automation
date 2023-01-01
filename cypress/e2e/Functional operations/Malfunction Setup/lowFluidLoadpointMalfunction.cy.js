@@ -1,10 +1,9 @@
-describe('Malfunction Point', () => {
+describe('Low Fluid Load', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "New Well 135";                         //Well name
 
-    const loadSetPoint = 25354;
-    const positionPoint = 21;
+    const loadSetPoint = 132160;
     const violation = 1;
     const retries = 1;
     const retriesTime = "01";
@@ -12,7 +11,7 @@ describe('Malfunction Point', () => {
     const secondRetries = 3;
     const secondRetriesTime = 2;
 
-    it('Check the work of Malfunction Point Malfunction', () => {
+    it('Check the work of Low Fluid Load Malfunction', () => {
         // test commands
         function commands() {
             cy.get('.well-list__group').contains(wellName).click();
@@ -23,9 +22,8 @@ describe('Malfunction Point', () => {
         }
 
         async function malfunctionSetupCommands() {
-            await cy.get('.mat-checkbox-input').eq(2).click({force: true});
+            await cy.get('.mat-checkbox-input').eq(3).click({force: true});
             await cy.get('.mat-input-element').eq(10).clear().type(loadSetPoint);
-            await cy.get('.mat-input-element').eq(11).clear().type(positionPoint);
             await cy.get('.mat-input-element').eq(12).clear().type(violation);
             await cy.get('.mat-input-element').eq(13).clear().type(retries);
             await cy.get('.mat-input-element').eq(15).clear().type(retriesTime);
@@ -45,7 +43,7 @@ describe('Malfunction Point', () => {
                     }
                 })
                 await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
-                await cy.get(".footer-status__value").eq(4).should('have.text', "Surface Point");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Min Fluid Load");
                 await cy.get('.sis-tabs__item').contains('I/O').click();
                 await cy.get('.sys-accordion__title').eq(2).click();
                 await cy.wait(1000);
@@ -63,7 +61,7 @@ describe('Malfunction Point', () => {
                 });
                 await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
                 await cy.get(".malf-current-retries", {timeout: parseInt(retriesTime) + 16000}).eq(1).should('not.have.text', "0");
-                await cy.get('.mat-checkbox-input').eq(2).click({force: true});
+                await cy.get('.mat-checkbox-input').eq(3).click({force: true});
                 await cy.get('#saveMalf').click();
                 await cy.wait(3000);
                 await cy.get('.malfunction-button').click({force: true});
@@ -73,7 +71,7 @@ describe('Malfunction Point', () => {
 
         function checkSecondary() {
             cy.get('body').then(async () => {
-                await cy.get('.mat-checkbox-input').eq(2).click({force: true});
+                await cy.get('.mat-checkbox-input').eq(3).click({force: true});
                 await cy.get('.mat-input-element').eq(10).clear().type(loadSetPoint);
                 await cy.get('.mat-input-element').eq(11).clear().type(positionPoint);
                 await cy.get('.mat-input-element').eq(12).clear().type(violation);
@@ -90,7 +88,7 @@ describe('Malfunction Point', () => {
                     }
                 })
                 await cy.get("@wellState", {timeout: 1820000}).should('have.text', "Stopped");
-                await cy.get(".footer-status__value").eq(4).should('have.text', "Surface Point Violation");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Min Fluid Load Violation");
                 await cy.get('.sis-tabs__item').contains('I/O').click();
                 await cy.get('.sys-accordion__title').eq(2).click();
                 await cy.wait(1000);
@@ -109,10 +107,10 @@ describe('Malfunction Point', () => {
                 await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
                 await cy.get('.malf-current-retries').eq(1).as('malfRetries');
                 await cy.get("@malfRetries", {timeout: (secondRetriesTime * 60000 * secondRetries)}).should('have.text', secondRetries);
-                await cy.get(".footer-status__value").eq(4).should('have.text', "Surface Point");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "Min Fluid Load");
                 await onOffModbusUnit(1);
                 await cy.wait(2000);
-                await cy.get('.mat-checkbox-input').eq(2).click({force: true});
+                await cy.get('.mat-checkbox-input').eq(3).click({force: true});
                 await cy.get('#saveMalf').click();
                 await cy.wait(3000);
                 await cy.get('.malfunction-button').click({force: true});
