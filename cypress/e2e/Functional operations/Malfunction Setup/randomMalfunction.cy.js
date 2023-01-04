@@ -7,8 +7,8 @@ describe('Custom Malfunction', () => {
     const violation = 1;
     const retries = 1;
     const retriesTime = "01";
-    const analogHaveText = "0.00";
 
+    const digitalSetPoint = 1;
     const secondRetries = 3;
     const secondRetriesTime = 2;
 
@@ -23,43 +23,20 @@ describe('Custom Malfunction', () => {
         }
 
         async function malfunctionSetupCommands() {
-            await setCustomAnalogMalf();
-            cy.get('body').then(async () => {
-                await cy.get('.footer-status__value').eq(2).as('wellState');
-                await cy.get('.footer-status__value').eq(2).then(async (e) => {
-                    if (e[0].innerText !== "Stopped") {
-                        await cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
-                    }
-                })
-                await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
-                await cy.get(".footer-status__value").eq(4).should('have.text', "I/O Malfunction");
-                await cy.get('.sis-tabs__item').contains('I/O').click();
-                await cy.get('.sys-accordion__title').eq(1).click();
-                await cy.wait(1000);
-                await cy.get('.sys-accordion__grid-item--value').eq(9).should('have.text', analogHaveText);
-                await cy.get('.sys-accordion__title').eq(0).click();
-                await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
-                    let oldValue;
-                    oldValue = e[0].innerText;
-                    cy.wait(5000);
-                    if (oldValue >= e[0].innerText) {
-                        cy.log(true);
-                    } else {
-                        cy.pause();
-                    }
-                });
-                await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-                await cy.get(".malf-current-retries", {timeout: parseInt(retriesTime) + 16000}).eq(4).should('not.have.text', "0");
-                await cy.get('.mat-checkbox-input').eq(4).click({force: true});
-                await cy.get('#saveMalf').click();
-                await cy.wait(3000);
-                await cy.get('.malfunction-button').click({force: true});
-                await cy.wait(2000);
-                await setCustomDigitalMalf();
-            });
+            await setCustomMalf();
+            await cy.get('.mat-checkbox-input').eq(4).click({force: true});
+            await cy.get('.mat-input-element').eq(16).clear().type(analogSetPoint);
+            await cy.get('.mat-input-element').eq(17).clear().type(violation);
+            await cy.get('.mat-input-element').eq(18).clear().type(retries);
+            await cy.get('.mat-input-element').eq(20).clear().type(retriesTime);
+            await cy.get('#saveMalf').click();
+            await cy.wait(3000);
+            await cy.reload();
+            await cy.wait(4000);
+            await checkMalfunction();
         }
 
-        async function setCustomAnalogMalf() {
+        async function setCustomMalf() {
             await cy.get('.sis-tabs__item').contains('I/O').click();
 
             //add new custom analog
@@ -75,19 +52,13 @@ describe('Custom Malfunction', () => {
             await cy.get('.io-add-malf').click();
             await cy.get('.mat-checkbox-input').eq(1).check({force: true});
             await cy.get('.mat-select').eq(4).click().get('.mat-option').contains("Min").click();
-            await cy.get('input[formcontrolname="value"]').clear().type(analogSetPoint);
-            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(violation);
-            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(retries);
-            await cy.get('.mat-input-element').eq(7).clear().type(retriesTime);
+            await cy.get('input[formcontrolname="value"]').clear().type(20);
+            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(2);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(4);
+            await cy.get('.mat-input-element').eq(7).clear().type(1);
             await cy.get('.mat-flat-button').eq(1).click();
 
             await cy.wait(2000);
-
-            await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-        }
-
-        async function setCustomDigitalMalf() {
-            await cy.get('.sis-tabs__item').contains('I/O').click();
 
             //add new custom digital
             await cy.get('.sys-accordion__header').eq(2).contains(' + Add New ').click();
@@ -97,20 +68,64 @@ describe('Custom Malfunction', () => {
             await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("DO 04").click();
             await cy.get('.io-add-malf').click();
             await cy.get('.mat-checkbox-input').eq(1).check({force: true});
-            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("False (opened)").click();
-            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(violation);
-            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(secondRetries);
-            await cy.get('.mat-input-element').eq(4).clear().type(secondRetriesTime);
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("True (closed)").click();
+            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(1);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(3);
+            await cy.get('.mat-input-element').eq(4).clear().type(1);
             await cy.get('.mat-flat-button').eq(1).click();
 
             await cy.wait(2000);
 
             await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-            await checkSecondary();
+        }
+        
+        function checkMalfunction() {
+            cy.get('body').then(async () => {
+                await cy.get('.footer-status__value').eq(2).as('wellState');
+                await cy.get('.footer-status__value').eq(2).then(async (e) => {
+                    if (e[0].innerText !== "Stopped") {
+                        await cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
+                    }
+                })
+                await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
+                await cy.get(".footer-status__value").eq(4).should('have.text', "I/O Malfunction");
+                await cy.get('.sis-tabs__item').contains('I/O').click();
+                await cy.get('.sys-accordion__title').eq(2).click();
+                await cy.wait(1000);
+                await cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "0");
+                await cy.get('.sys-accordion__title').eq(0).click();
+                await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
+                    let oldValue;
+                    oldValue = e[0].innerText;
+                    cy.wait(5000);
+                    if (oldValue >= e[0].innerText) {
+                        cy.log(true);
+                    } else {
+                        cy.pause();
+                    }
+                });
+                await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
+                await cy.get(".malf-current-retries", {timeout: parseInt(retriesTime) + 16000}).eq(4).should('not.have.text', "0");
+                await cy.get('.mat-checkbox-input').eq(5).click({force: true});
+                await cy.get('#saveMalf').click();
+                await cy.wait(3000);
+                await cy.get('.malfunction-button').click({force: true});
+                await checkSecondary();
+            });
         }
 
-         function checkSecondary() {
+        function checkSecondary() {
             cy.get('body').then(async () => {
+                await cy.get('.mat-checkbox-input').eq(5).click({force: true});
+                await cy.get('.mat-input-element').eq(21).clear().type(digitalSetPoint);
+                await cy.get('.mat-input-element').eq(22).clear().type(positionPoint);
+                await cy.get('.mat-input-element').eq(23).clear().type(violation);
+                await cy.get('.mat-input-element').eq(24).clear().type(secondRetries);
+                await cy.get('.mat-input-element').eq(26).clear().type(secondRetriesTime);
+                await cy.get('#saveMalf').click();
+                await cy.wait(3000);
+                await cy.reload();
+                await cy.wait(2000);
                 await cy.get('.footer-status__value').eq(2).as('wellState');
                 await cy.get('.footer-status__value').eq(2).then((e) => {
                     if (e[0].innerText !== "Stopped") {
@@ -122,7 +137,7 @@ describe('Custom Malfunction', () => {
                 await cy.get('.sis-tabs__item').contains('I/O').click();
                 await cy.get('.sys-accordion__title').eq(2).click();
                 await cy.wait(1000);
-                await cy.get('.sys-accordion__grid-item--value').eq(13).should('have.text', "0");
+                await cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "0");
                 await cy.get('.sys-accordion__title').eq(0).click();
                 await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
                     let oldValue;

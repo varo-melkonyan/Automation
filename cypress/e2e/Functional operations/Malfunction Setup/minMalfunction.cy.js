@@ -31,10 +31,10 @@ describe('Minimum Load', () => {
             await cy.wait(3000);
             await cy.reload();
             await cy.wait(4000);
-            await checkStatus();
+            await checkMalfunction();
         }
 
-        function checkStatus() {
+        function checkMalfunction() {
             cy.get('body').then(async () => {
                 await cy.get('.footer-status__value').eq(2).as('wellState');
                 await cy.get('.footer-status__value').eq(2).then(async (e) => {
