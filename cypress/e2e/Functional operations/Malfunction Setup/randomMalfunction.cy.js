@@ -1,16 +1,9 @@
+const { func } = require("assert-plus");
+
 describe('Custom Malfunction', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "New Well 135";                         //Well name
-
-    const analogSetPoint = 40;
-    const violation = 1;
-    const retries = 1;
-    const retriesTime = "01";
-
-    const digitalSetPoint = 1;
-    const secondRetries = 3;
-    const secondRetriesTime = 2;
 
     it('Check the work of Custom Malfunction', () => {
         // test commands
@@ -19,21 +12,7 @@ describe('Custom Malfunction', () => {
             cy.wait(1000);
             cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
             onOffModbusUnit(0);
-            malfunctionSetupCommands();
-        }
-
-        async function malfunctionSetupCommands() {
-            await setCustomMalf();
-            await cy.get('.mat-checkbox-input').eq(4).click({force: true});
-            await cy.get('.mat-input-element').eq(16).clear().type(analogSetPoint);
-            await cy.get('.mat-input-element').eq(17).clear().type(violation);
-            await cy.get('.mat-input-element').eq(18).clear().type(retries);
-            await cy.get('.mat-input-element').eq(20).clear().type(retriesTime);
-            await cy.get('#saveMalf').click();
-            await cy.wait(3000);
-            await cy.reload();
-            await cy.wait(4000);
-            await checkMalfunction();
+            checkMalItem(0);
         }
 
         async function setCustomMalf() {
@@ -47,6 +26,27 @@ describe('Custom Malfunction', () => {
             await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("AO 01").click();
             await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("0-10V").click();
             await cy.get('.mat-select').eq(3).click().get('.mat-option').contains("Hz").click();
+            await cy.get('input[formcontrolname="y1"]').clear().type(0);
+            await cy.get('input[formcontrolname="y2"]').clear().type(60);
+            await cy.get('.io-add-malf').click();
+            await cy.get('.mat-checkbox-input').eq(1).check({force: true});
+            await cy.get('.mat-select').eq(4).click().get('.mat-option').contains("Min").click();
+            await cy.get('input[formcontrolname="value"]').clear().type(20);
+            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(2);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(4);
+            await cy.get('.mat-input-element').eq(7).clear().type(1);
+            await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.wait(2000);
+
+            //add VFD Speed Channel
+            await cy.get('.sys-accordion__header').eq(1).contains(' + Add New ').click();
+            await cy.get('.mat-select').eq(0).click().get('.mat-option').contains("VFD Speed").click();
+            await cy.get('input[formcontrolname="name"]').clear().type("Custom Analog");
+            await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("Module SYNC 1").click();
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("AO 01").click();
+            await cy.get('.mat-select').eq(3).click().get('.mat-option').contains("0-10V").click();
+            await cy.get('.mat-select').eq(4).click().get('.mat-option').contains("Hz").click();
             await cy.get('input[formcontrolname="y1"]').clear().type(0);
             await cy.get('input[formcontrolname="y2"]').clear().type(60);
             await cy.get('.io-add-malf').click();
@@ -79,86 +79,204 @@ describe('Custom Malfunction', () => {
             await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
         }
         
-        function checkMalfunction() {
-            cy.get('body').then(async () => {
-                await cy.get('.footer-status__value').eq(2).as('wellState');
-                await cy.get('.footer-status__value').eq(2).then(async (e) => {
-                    if (e[0].innerText !== "Stopped") {
-                        await cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
-                    }
-                })
-                await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
-                await cy.get(".footer-status__value").eq(4).should('have.text', "I/O Malfunction");
-                await cy.get('.sis-tabs__item').contains('I/O').click();
-                await cy.get('.sys-accordion__title').eq(2).click();
-                await cy.wait(1000);
-                await cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "0");
-                await cy.get('.sys-accordion__title').eq(0).click();
-                await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
-                    let oldValue;
-                    oldValue = e[0].innerText;
-                    cy.wait(5000);
-                    if (oldValue >= e[0].innerText) {
-                        cy.log(true);
-                    } else {
-                        cy.pause();
+        async function checkMalItem(custom) {
+            await cy.get('.mat-checkbox-input').click({force: true, multiple: true});
+            await cy.get('#saveMalf').click();
+            await cy.wait(3000);
+
+            await cy.get('.malf-label').eq(0).as('maxMalf');
+            await cy.get('.malf-label').eq(1).as('minMalf');
+            await cy.get('.malf-label').eq(2).as('pointMalf');
+            await cy.get('.malf-label').eq(3).as('lowFluidMalf');
+
+            if(custom === 1) {
+                await cy.get('.malf-label').eq(4).as('vfdSpeed');
+                await cy.get('.malf-label').eq(5).as('anMalf');
+                await cy.get('.malf-label').eq(6).as('diMalf');
+            }
+
+            cy.wait(10000);
+
+            await cy.get("@maxMalf").then(async (e) => {
+                if(e.css('color') === 'rgb(238, 88, 53)') {
+                    await cy.get('.mat-input-element').eq(2).then(async (retries) => {
+                        let retriesa = retries[0].value;
+                        await cy.get('.mat-input-element').eq(3).then(async (retriesTimeH) => {
+                            let retriesTimeHa = retriesTimeH[0].value;
+                            await cy.get('.mat-input-element').eq(4).then(async (retriesTimeMin) => {
+                                let retriesTimeMina = retriesTimeMin[0].value;
+                                await cy.get('.malf-current-retries').eq(0).then(async (currentRetries) => {
+                                    let currentRetriesa = currentRetries[0].value;
+                                    await console.log(retries[0].value);
+                                    await checkMalfunction(retriesa, retriesTimeHa, retriesTimeMina, currentRetriesa, 0);
+                                });
+                            });
+                        });
+                    });
+                }
+            })
+
+            await cy.get("@minMalf").then(async (e) => {
+                if(e.css('color') === 'rgb(238, 88, 53)') {
+                    await cy.get('.mat-input-element').eq(7).then(async (retries) => {
+                        let retriesa = retries[0].value;
+                        await cy.get('.mat-input-element').eq(8).then(async (retriesTimeH) => {
+                            let retriesTimeHa = retriesTimeH[0].value;
+                            await cy.get('.mat-input-element').eq(9).then(async (retriesTimeMin) => {
+                                let retriesTimeMina = retriesTimeMin[0].value;
+                                await cy.get('.malf-current-retries').eq(1).then(async (currentRetries) => {
+                                    let currentRetriesa = currentRetries[0].value;
+                                    await checkMalfunction(retriesa, retriesTimeHa, retriesTimeMina, currentRetriesa, 1);
+                                });
+                            });
+                        });
+                    });
+                }
+            });
+
+            await cy.get("@pointMalf").then(async (e) => {
+                if(e.css('color') === 'rgb(238, 88, 53)') {
+                    await cy.get('.mat-input-element').eq(13).then(async (retries) => {
+                        let retriesa = retries[0].value;
+                        await cy.get('.mat-input-element').eq(14).then(async (retriesTimeH) => {
+                            let retriesTimeHa = retriesTimeH[0].value;
+                            await cy.get('.mat-input-element').eq(15).then(async (retriesTimeMin) => {
+                                let retriesTimeMina = retriesTimeMin[0].value;
+                                await cy.get('.malf-current-retries').eq(2).then(async (currentRetries) => {
+                                    let currentRetriesa = currentRetries[0].value;
+                                    await checkMalfunction(retriesa, retriesTimeHa, retriesTimeMina, currentRetriesa, 2);
+                                });
+                            });
+                        });
+                    });
+                }
+            });
+
+            await cy.get("@lowFluidMalf").then(async (e) => {
+                if(e.css('color') === 'rgb(238, 88, 53)') {
+                    await cy.get('.mat-input-element').eq(18).then((e) => retries = e[0].value);
+                    await cy.get('.mat-input-element').eq(19).then((e) => retriesTimeH = e[0].value);
+                    await cy.get('.mat-input-element').eq(20).then((e) => retriesTimeMin = e[0].value);
+                    await cy.get('.malf-current-retries').eq(3).then((e) => currentRetries = e[0].value);
+
+                    await checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, 3);
+                }
+            });
+
+            if(custom === 1) {
+                await cy.get("@vfdSpeed").then(async (e) => {
+                    if(e.css('color') === 'rgb(238, 88, 53)') {
+                        await cy.get('.mat-input-element').eq(23).then((e) => retries = e[0].value);
+                        await cy.get('.mat-input-element').eq(24).then((e) => retriesTimeH = e[0].value);
+                        await cy.get('.mat-input-element').eq(25).then((e) => retriesTimeMin = e[0].value);
+                        await cy.get('.malf-current-retries').eq(4).then((e) => currentRetries = e[0].value);
+
+                        await checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, 4);
                     }
                 });
-                await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-                await cy.get(".malf-current-retries", {timeout: parseInt(retriesTime) + 16000}).eq(4).should('not.have.text', "0");
-                await cy.get('.mat-checkbox-input').eq(5).click({force: true});
-                await cy.get('#saveMalf').click();
-                await cy.wait(3000);
-                await cy.get('.malfunction-button').click({force: true});
-                await checkSecondary();
-            });
+
+                await cy.get("@anMalf").then(async (e) => {
+                    if(e.css('color') === 'rgb(238, 88, 53)') {
+                        await cy.get('.mat-input-element').eq(28).then((e) => retries = e[0].value);
+                        await cy.get('.mat-input-element').eq(29).then((e) => retriesTimeH = e[0].value);
+                        await cy.get('.mat-input-element').eq(30).then((e) => retriesTimeMin = e[0].value);
+                        await cy.get('.malf-current-retries').eq(5).then((e) => currentRetries = e[0].value);
+
+                        await checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, 5);
+                    }
+                });
+
+                await cy.get("@diMalf").then(async (e) => {
+                    if(e.css('color') === 'rgb(238, 88, 53)') {
+                        await cy.get('.mat-input-element').eq(33).then((e) => retries = e[0].value);
+                        await cy.get('.mat-input-element').eq(34).then((e) => retriesTimeH = e[0].value);
+                        await cy.get('.mat-input-element').eq(35).then((e) => retriesTimeMin = e[0].value);
+                        await cy.get('.malf-current-retries').eq(6).then((e) => currentRetries = e[0].value);
+
+                        await checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, 6);
+                    }
+                });
+            }
         }
 
-        function checkSecondary() {
-            cy.get('body').then(async () => {
-                await cy.get('.mat-checkbox-input').eq(5).click({force: true});
-                await cy.get('.mat-input-element').eq(21).clear().type(digitalSetPoint);
-                await cy.get('.mat-input-element').eq(22).clear().type(positionPoint);
-                await cy.get('.mat-input-element').eq(23).clear().type(violation);
-                await cy.get('.mat-input-element').eq(24).clear().type(secondRetries);
-                await cy.get('.mat-input-element').eq(26).clear().type(secondRetriesTime);
-                await cy.get('#saveMalf').click();
-                await cy.wait(3000);
-                await cy.reload();
-                await cy.wait(2000);
-                await cy.get('.footer-status__value').eq(2).as('wellState');
-                await cy.get('.footer-status__value').eq(2).then((e) => {
-                    if (e[0].innerText !== "Stopped") {
-                        cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
+        async function checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, malfItem) {
+            await cy.get(".footer-status__value").eq(4).then(async (e) => {
+                if (e[0].innerText.includes("Malfunction")) {
+                    await cy.get('.footer-status__value').eq(2).as('wellState');
+                    await cy.get('.footer-status__value').eq(2).then(async (e) => {
+                        if (e[0].innerText !== "Stopped") {
+                            await cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
+                        }
+                    })
+                    await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
+                    await cy.get(".footer-status__value").eq(4).should('contain', "Malfunction");
+                    await cy.get('.sis-tabs__item').contains('I/O').click();
+                    await cy.get('.sys-accordion__title').eq(0).click();
+                    await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
+                        let oldValue;
+                        oldValue = e[0].innerText;
+                        cy.wait(5000);
+                        if (oldValue >= e[0].innerText) {
+                            cy.log(true);
+                        } else {
+                            cy.pause();
+                        }
+                    });
+                    await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
+                    if (retriesTimeH === "00") {
+                        await cy.get(".malf-current-retries", {timeout: parseInt(retriesTimeMin) + 16000}).eq(malfItem).should('not.have.text', "0");
                     }
-                })
-                await cy.get("@wellState", {timeout: 1820000}).should('have.text', "Stopped");
-                await cy.get(".footer-status__value").eq(4).should('have.text', "I/O Violation");
-                await cy.get('.sis-tabs__item').contains('I/O').click();
-                await cy.get('.sys-accordion__title').eq(2).click();
-                await cy.wait(1000);
-                await cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "0");
-                await cy.get('.sys-accordion__title').eq(0).click();
-                await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
-                    let oldValue;
-                    oldValue = e[0].innerText;
-                    cy.wait(5000);
-                    if (oldValue >= e[0].innerText) {
-                        cy.log(true);
-                    } else {
-                        cy.pause();
+                    else {
+                        await cy.get(".malf-current-retries", {timeout: parseInt(retriesTimeH) * 60000 + parseInt(retriesTimeMin) + 16000}).eq(malfItem).should('not.have.text', "0");
                     }
-                });
-                await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-                await cy.get('.malf-current-retries').eq(5).as('malfRetries');
-                await cy.get("@malfRetries", {timeout: (secondRetriesTime * 60000 * secondRetries)}).should('have.text', secondRetries);
-                await cy.get(".footer-status__value").eq(4).should('have.text', "I/O Malfunction");
-                await onOffModbusUnit(1);
-                await cy.wait(2000);
-                await cy.get('.mat-checkbox-input').eq(5).click({force: true});
-                await cy.get('#saveMalf').click();
-                await cy.wait(3000);
-                await cy.get('.malfunction-button').click({force: true});
+                    await cy.get('.mat-checkbox-input').click({force: true, multiple: true});
+                    await cy.get('#saveMalf').click();
+                    await cy.wait(3000);
+                    await cy.get('.malfunction-button').click({force: true});
+                }
+                else if (e[0].innerText.includes("Violation")) {
+                    await cy.get('.footer-status__value').eq(2).as('wellState');
+                    await cy.get('.footer-status__value').eq(2).then((e) => {
+                        if (e[0].innerText !== "Stopped") {
+                            cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
+                        }
+                    })
+                    await cy.get("@wellState", {timeout: 1820000}).should('have.text', "Stopped");
+                    await cy.get(".footer-status__value").eq(4).should('contain', "Violation");
+                    await cy.get('.sis-tabs__item').contains('I/O').click();
+                    await cy.get('.sys-accordion__title').eq(0).click();
+                    await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
+                        let oldValue;
+                        oldValue = e[0].innerText;
+                        cy.wait(5000);
+                        if (oldValue >= e[0].innerText) {
+                            cy.log(true);
+                        } else {
+                            cy.pause();
+                        }
+                    });
+                    await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
+                    await cy.log(malfItem);
+                    await cy.log(retries);
+                    await cy.pause();
+                    await cy.get('.malf-current-retries').eq(malfItem).as('malfRetries');
+                    if (retriesTimeH === "00") {
+                        await cy.get("@malfRetries", {timeout: parseInt(retriesTimeMin) * 60000 * retries}).eq(malfItem).should('have.text', retries);
+                    }
+                    else {
+                        await cy.get("@malfRetries", {timeout: parseInt(retriesTimeH) * 60000 * 60000 + parseInt(retriesTimeMin) * retries}).eq(malfItem).should('have.text', retries);
+                    }
+                    await cy.get(".footer-status__value").eq(4).should('contain', "Malfunction");
+                    await onOffModbusUnit(1);
+                    await cy.wait(2000);
+                    await cy.get('.mat-checkbox-input').click({force: true, multiple: true});
+                    await cy.get('#saveMalf').click();
+                    await cy.wait(3000);
+                    await cy.get('.malfunction-button').click({force: true});
+                }
+                else {
+                    cy.pause();
+                }
             });
         }
 
