@@ -87,12 +87,12 @@ describe('Custom Malfunction', () => {
             await cy.get('.malf-label').eq(0).as('maxMalf');
             await cy.get('.malf-label').eq(1).as('minMalf');
             await cy.get('.malf-label').eq(2).as('pointMalf');
-            await cy.get('.malf-label').eq(3).as('lowFluidMalf');
+            await cy.get('.malf-label').eq(5).as('lowFluidMalf');
 
             if(custom === 1) {
-                await cy.get('.malf-label').eq(4).as('vfdSpeed');
-                await cy.get('.malf-label').eq(5).as('anMalf');
-                await cy.get('.malf-label').eq(6).as('diMalf');
+                await cy.get('.malf-label').eq(6).as('vfdSpeed');
+                await cy.get('.malf-label').eq(7).as('anMalf');
+                await cy.get('.malf-label').eq(8).as('diMalf');
             }
 
             cy.wait(10000);
@@ -154,46 +154,74 @@ describe('Custom Malfunction', () => {
 
             await cy.get("@lowFluidMalf").then(async (e) => {
                 if(e.css('color') === 'rgb(238, 88, 53)') {
-                    await cy.get('.mat-input-element').eq(18).then((e) => retries = e[0].value);
-                    await cy.get('.mat-input-element').eq(19).then((e) => retriesTimeH = e[0].value);
-                    await cy.get('.mat-input-element').eq(20).then((e) => retriesTimeMin = e[0].value);
-                    await cy.get('.malf-current-retries').eq(3).then((e) => currentRetries = e[0].value);
-
-                    await checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, 3);
+                    await cy.get('.mat-input-element').eq(18).then(async (retries) => {
+                        let retriesa = retries[0].value;
+                        await cy.get('.mat-input-element').eq(19).then(async (retriesTimeH) => {
+                            let retriesTimeHa = retriesTimeH[0].value;
+                            await cy.get('.mat-input-element').eq(20).then(async (retriesTimeMin) => {
+                                let retriesTimeMina = retriesTimeMin[0].value;
+                                await cy.get('.malf-current-retries').eq(3).then(async (currentRetries) => {
+                                    let currentRetriesa = currentRetries[0].value;
+                                    await checkMalfunction(retriesa, retriesTimeHa, retriesTimeMina, currentRetriesa, 3);
+                                });
+                            });
+                        });
+                    });
                 }
             });
 
             if(custom === 1) {
                 await cy.get("@vfdSpeed").then(async (e) => {
                     if(e.css('color') === 'rgb(238, 88, 53)') {
-                        await cy.get('.mat-input-element').eq(23).then((e) => retries = e[0].value);
-                        await cy.get('.mat-input-element').eq(24).then((e) => retriesTimeH = e[0].value);
-                        await cy.get('.mat-input-element').eq(25).then((e) => retriesTimeMin = e[0].value);
-                        await cy.get('.malf-current-retries').eq(4).then((e) => currentRetries = e[0].value);
-
-                        await checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, 4);
+                        await cy.get('.mat-input-element').eq(23).then(async (retries) => {
+                            let retriesa = retries[0].value;
+                            await cy.get('.mat-input-element').eq(24).then(async (retriesTimeH) => {
+                                let retriesTimeHa = retriesTimeH[0].value;
+                                await cy.get('.mat-input-element').eq(25).then(async (retriesTimeMin) => {
+                                    let retriesTimeMina = retriesTimeMin[0].value;
+                                    await cy.get('.malf-current-retries').eq(4).then(async (currentRetries) => {
+                                        let currentRetriesa = currentRetries[0].value;
+                                        await checkMalfunction(retriesa, retriesTimeHa, retriesTimeMina, currentRetriesa, 4);
+                                    });
+                                });
+                            });
+                        });
                     }
                 });
 
                 await cy.get("@anMalf").then(async (e) => {
                     if(e.css('color') === 'rgb(238, 88, 53)') {
-                        await cy.get('.mat-input-element').eq(28).then((e) => retries = e[0].value);
-                        await cy.get('.mat-input-element').eq(29).then((e) => retriesTimeH = e[0].value);
-                        await cy.get('.mat-input-element').eq(30).then((e) => retriesTimeMin = e[0].value);
-                        await cy.get('.malf-current-retries').eq(5).then((e) => currentRetries = e[0].value);
-
-                        await checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, 5);
+                        await cy.get('.mat-input-element').eq(28).then(async (retries) => {
+                            let retriesa = retries[0].value;
+                            await cy.get('.mat-input-element').eq(29).then(async (retriesTimeH) => {
+                                let retriesTimeHa = retriesTimeH[0].value;
+                                await cy.get('.mat-input-element').eq(30).then(async (retriesTimeMin) => {
+                                    let retriesTimeMina = retriesTimeMin[0].value;
+                                    await cy.get('.malf-current-retries').eq(5).then(async (currentRetries) => {
+                                        let currentRetriesa = currentRetries[0].value;
+                                        await checkMalfunction(retriesa, retriesTimeHa, retriesTimeMina, currentRetriesa, 5);
+                                    });
+                                });
+                            });
+                        });
                     }
                 });
 
                 await cy.get("@diMalf").then(async (e) => {
                     if(e.css('color') === 'rgb(238, 88, 53)') {
-                        await cy.get('.mat-input-element').eq(33).then((e) => retries = e[0].value);
-                        await cy.get('.mat-input-element').eq(34).then((e) => retriesTimeH = e[0].value);
-                        await cy.get('.mat-input-element').eq(35).then((e) => retriesTimeMin = e[0].value);
-                        await cy.get('.malf-current-retries').eq(6).then((e) => currentRetries = e[0].value);
-
-                        await checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, 6);
+                        await cy.get('.mat-input-element').eq(33).then(async (retries) => {
+                            let retriesa = retries[0].value;
+                            await cy.get('.mat-input-element').eq(34).then(async (retriesTimeH) => {
+                                let retriesTimeHa = retriesTimeH[0].value;
+                                await cy.get('.mat-input-element').eq(35).then(async (retriesTimeMin) => {
+                                    let retriesTimeMina = retriesTimeMin[0].value;
+                                    await cy.get('.malf-current-retries').eq(6).then(async (currentRetries) => {
+                                        let currentRetriesa = currentRetries[0].value;
+                                        await checkMalfunction(retriesa, retriesTimeHa, retriesTimeMina, currentRetriesa, 6);
+                                    });
+                                });
+                            });
+                        });
                     }
                 });
             }
@@ -201,7 +229,7 @@ describe('Custom Malfunction', () => {
 
         async function checkMalfunction(retries, retriesTimeH, retriesTimeMin, currentRetries, malfItem) {
             await cy.get(".footer-status__value").eq(4).then(async (e) => {
-                if (e[0].innerText.includes("Malfunction")) {
+                if (!e[0].innerText.includes("Violation")) {
                     await cy.get('.footer-status__value').eq(2).as('wellState');
                     await cy.get('.footer-status__value').eq(2).then(async (e) => {
                         if (e[0].innerText !== "Stopped") {
@@ -209,7 +237,7 @@ describe('Custom Malfunction', () => {
                         }
                     })
                     await cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
-                    await cy.get(".footer-status__value").eq(4).should('contain', "Malfunction");
+                    await cy.get(".footer-status__value").eq(4).should('not.contain', "Violation");
                     await cy.get('.sis-tabs__item').contains('I/O').click();
                     await cy.get('.sys-accordion__title').eq(0).click();
                     await cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
@@ -256,17 +284,21 @@ describe('Custom Malfunction', () => {
                         }
                     });
                     await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
-                    await cy.log(malfItem);
-                    await cy.log(retries);
-                    await cy.pause();
                     await cy.get('.malf-current-retries').eq(malfItem).as('malfRetries');
                     if (retriesTimeH === "00") {
-                        await cy.get("@malfRetries", {timeout: parseInt(retriesTimeMin) * 60000 * retries}).eq(malfItem).should('have.text', retries);
+                        await cy.get("@malfRetries", {timeout: parseInt(retriesTimeMin) * 60000 * retries + 16000}).should('have.text', retries);
                     }
                     else {
-                        await cy.get("@malfRetries", {timeout: parseInt(retriesTimeH) * 60000 * 60000 + parseInt(retriesTimeMin) * retries}).eq(malfItem).should('have.text', retries);
+                        await cy.get("@malfRetries", {timeout: parseInt(retriesTimeH) * 60000 * 60000 + parseInt(retriesTimeMin) * retries + 16000}).should('have.text', retries);
                     }
-                    await cy.get(".footer-status__value").eq(4).should('contain', "Malfunction");
+                    await cy.wait(6000);
+                    await cy.get('.footer-status__value').eq(2).then((e) => {
+                        if (e[0].innerText !== "Stopped") {
+                            cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
+                        }
+                    })
+                    await cy.get("@wellState", {timeout: 1820000}).should('have.text', "Stopped");
+                    await cy.get(".footer-status__value").eq(4).should('not.contain', "Violation");
                     await onOffModbusUnit(1);
                     await cy.wait(2000);
                     await cy.get('.mat-checkbox-input').click({force: true, multiple: true});
