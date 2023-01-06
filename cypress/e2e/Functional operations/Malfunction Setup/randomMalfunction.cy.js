@@ -5,6 +5,8 @@ describe('Custom Malfunction', () => {
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "New Well 135";                         //Well name
 
+    let customMalf = 0;
+
     it('Check the work of Custom Malfunction', () => {
         // test commands
         function commands() {
@@ -42,7 +44,6 @@ describe('Custom Malfunction', () => {
             //add VFD Speed Channel
             await cy.get('.sys-accordion__header').eq(1).contains(' + Add New ').click();
             await cy.get('.mat-select').eq(0).click().get('.mat-option').contains("VFD Speed").click();
-            await cy.get('input[formcontrolname="name"]').clear().type("Custom Analog");
             await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("Module SYNC 1").click();
             await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("AO 01").click();
             await cy.get('.mat-select').eq(3).click().get('.mat-option').contains("0-10V").click();
@@ -51,11 +52,11 @@ describe('Custom Malfunction', () => {
             await cy.get('input[formcontrolname="y2"]').clear().type(60);
             await cy.get('.io-add-malf').click();
             await cy.get('.mat-checkbox-input').eq(1).check({force: true});
-            await cy.get('.mat-select').eq(4).click().get('.mat-option').contains("Min").click();
+            await cy.get('.mat-select').eq(5).click().get('.mat-option').contains("Min").click();
             await cy.get('input[formcontrolname="value"]').clear().type(20);
             await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(2);
             await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(4);
-            await cy.get('.mat-input-element').eq(7).clear().type(1);
+            await cy.get('.mat-input-element').eq(6).clear().type(1);
             await cy.get('.mat-flat-button').eq(1).click();
 
             await cy.wait(2000);
@@ -77,9 +78,11 @@ describe('Custom Malfunction', () => {
             await cy.wait(2000);
 
             await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
+            await checkMalItem(1);
         }
         
         async function checkMalItem(custom) {
+            customMalf = custom;
             await cy.get('.mat-checkbox-input').click({force: true, multiple: true});
             await cy.get('#saveMalf').click();
             await cy.wait(3000);
@@ -95,7 +98,7 @@ describe('Custom Malfunction', () => {
                 await cy.get('.malf-label').eq(8).as('diMalf');
             }
 
-            cy.wait(10000);
+            cy.wait(8000);
 
             await cy.get("@maxMalf").then(async (e) => {
                 if(e.css('color') === 'rgb(238, 88, 53)') {
@@ -308,6 +311,9 @@ describe('Custom Malfunction', () => {
                 }
                 else {
                     cy.pause();
+                }
+                if (customMalf === 0) {
+                    await setCustomMalf();
                 }
             });
         }
