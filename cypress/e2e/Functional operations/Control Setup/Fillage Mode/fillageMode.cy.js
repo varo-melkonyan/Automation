@@ -1,7 +1,7 @@
 describe('Well status', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "New Well 135";                         //Well name
+    const wellName = "KWM+ 135";                         //Well name
 
     const fillageSetPoint = 90;
     const allowedStroke = 2;

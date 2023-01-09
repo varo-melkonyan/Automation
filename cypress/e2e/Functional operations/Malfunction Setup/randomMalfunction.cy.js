@@ -3,7 +3,7 @@ const { func } = require("assert-plus");
 describe('Custom Malfunction', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "New Well 135";                         //Well name
+    const wellName = "KWM+ 135";                         //Well name
 
     let customMalf = 0;
 
@@ -80,10 +80,13 @@ describe('Custom Malfunction', () => {
             await cy.get('.sis-tabs__item').contains('Malfunction Setup').click();
             await checkMalItem(1);
         }
-        
+
         async function checkMalItem(custom) {
             customMalf = custom;
-            await cy.get('.mat-checkbox-input').click({force: true, multiple: true});
+            await cy.get('.mat-checkbox-input').eq(0).click({force: true, multiple: true});
+            await cy.get('.mat-checkbox-input').eq(1).click({force: true, multiple: true});
+            await cy.get('.mat-checkbox-input').eq(2).click({force: true, multiple: true});
+            await cy.get('.mat-checkbox-input').eq(3).click({force: true, multiple: true});
             await cy.get('#saveMalf').click();
             await cy.wait(3000);
 
@@ -110,7 +113,6 @@ describe('Custom Malfunction', () => {
                                 let retriesTimeMina = retriesTimeMin[0].value;
                                 await cy.get('.malf-current-retries').eq(0).then(async (currentRetries) => {
                                     let currentRetriesa = currentRetries[0].value;
-                                    await console.log(retries[0].value);
                                     await checkMalfunction(retriesa, retriesTimeHa, retriesTimeMina, currentRetriesa, 0);
                                 });
                             });

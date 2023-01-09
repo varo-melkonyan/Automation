@@ -1,7 +1,7 @@
 describe('Malfunction Point', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "New Well 135";                         //Well name
+    const wellName = "KWM+ 135";                         //Well name
 
     const loadSetPoint = 25354;
     const positionPoint = 21;

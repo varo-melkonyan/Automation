@@ -1,7 +1,7 @@
 describe('Low Fluid Load', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "New Well 135";                         //Well name
+    const wellName = "KWM+ 135";                         //Well name
 
     const loadSetPoint = 132160;
     const violation = 1;
