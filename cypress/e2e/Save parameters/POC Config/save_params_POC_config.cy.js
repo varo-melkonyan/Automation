@@ -1,7 +1,7 @@
 describe('POC Configuration', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "Well 123";                         //Well name
+    const wellName = "KWM+ 135";                         //Well name
     const configMode = ["Greenshot", "Well Manager"];
     let currentMode = 0;
 

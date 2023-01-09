@@ -1,7 +1,7 @@
 describe('GreenShot Configuration', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
-    const wellName = "Test1234";                         //Well name
+    const wellName = "KWM+ 135";                         //Well name
     const configMode = ["Greenshot", "Well Manager", "Greenshot and Well Manager"];
     let currentMode = 1;
 
