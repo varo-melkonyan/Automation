@@ -107,7 +107,7 @@ describe('Well status', () => {
                 commands();
             } else {
                 cy.get('.sis-account__button').click();
-                cy.get('#logOutId').click();
+                cy.get('#logOutId').click({force: true});
                 cy.wait(2000);
                 cy.url().should("eq", "https://automation.wellworxenergy.com/");
                 loginPage();
