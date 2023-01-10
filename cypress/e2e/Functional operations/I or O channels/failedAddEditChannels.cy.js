@@ -21,7 +21,7 @@ describe('Custom Malfunction', () => {
 
         async function setChannels() {
             await cy.get('.sis-tabs__item').contains('I/O').click({force: true});
-            await cy.wait(10000);
+            await cy.wait(7000);
             //add new custom analog
             await cy.get('.sys-accordion__header').eq(1).contains(' + Add New ').click();
             await cy.get('.mat-checkbox-input').check({force: true});
@@ -134,6 +134,7 @@ describe('Custom Malfunction', () => {
             await cy.get('input[formcontrolname="y1"]').should('have.value', 0);
             await cy.get('input[formcontrolname="y2"]').should('have.value', 60);
             await cy.get('.mat-flat-button').eq(0).click();
+            await cy.pause();
 
             //check Buzzer channel
             await cy.get('.sys-accordion__grid-item').eq(26).should('be.text', 'Buzzer');
@@ -149,16 +150,15 @@ describe('Custom Malfunction', () => {
             await cy.get('.mat-flat-button').eq(0).click();
 
             //check custom Digital
-            await cy.get('.sys-accordion__grid-item').eq(29).should('be.text', 'Custom Digital');
-            await cy.get('.sys-accordion__grid-item').eq(29).contains('Custom Digital').click({force: true});
+            await cy.get('.sys-accordion__grid-item').eq(30).should('be.text', 'Custom Digital');
+            await cy.get('.sys-accordion__grid-item').eq(30).contains('Custom Digital').click({force: true});
             await cy.get('input[formcontrolname="name"]').should('have.value', "Custom Digital");
             await cy.get('.mat-select-value-text > span').eq(0).should('contain.text', "Module 8DI/8DO");
             await cy.get('.mat-select-value-text > span').eq(1).should('contain.text', "DO 04");
             await cy.get('.mat-flat-button').eq(0).click();
 
             await cy.pause();
-            await cy.get('.sys-accordion__grid-item').eq(21).click({force: true});
-            await cy.get('.sys-accordion__grid-item').eq(24).click({force: true});
+            await checkEditChannels();
         }
 
         async function checkEditChannels() {
