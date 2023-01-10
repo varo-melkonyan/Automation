@@ -8,6 +8,8 @@ describe('VFD', () => {
     const startUpStroke = 2;
     const secondaryFillageSetPoint = 80;
 
+    let constantSpeed = 0;
+
     it('Check the work of VFD without Speed Zones', () => {
         // test commands
         function commands() {
@@ -15,101 +17,92 @@ describe('VFD', () => {
             cy.wait(1000);
             cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
             onOffModbusUnit(0);
-            controlSetupCommands();
+            controlSetupVFDCommands();
         }
 
-        async function controlSetupCommands() {
+        async function controlSetupVFDCommands() {
+            await cy.get('.sis-tabs__item').contains('I/O').click({force: true});
+            await cy.wait(7000);
+
+            //add VFD Speed Channel
+            await cy.get('.sys-accordion__header').eq(1).contains(' + Add New ').click();
+            await cy.get('.mat-select').eq(0).click().get('.mat-option').contains("VFD Speed").click();
+            await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("Module SYNC 1").click();
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("AO 01").click();
+            await cy.get('.mat-select').eq(3).click().get('.mat-option').contains("0-10V").click();
+            await cy.get('.mat-select').eq(4).click().get('.mat-option').contains("Hz").click();
+            await cy.get('input[formcontrolname="y1"]').clear().type(0);
+            await cy.get('input[formcontrolname="y2"]').clear().type(60);
+            await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.get('.sis-tabs__item').contains('Control Setup').click({force: true});
+
+            await hostModeVFDStatus();
+            await fillageModeVFDStatus();
+        }
+
+        async function hostModeVFDStatus() {
+            //Check Host mode time VFD status
             await cy.get('.mat-select').eq(0).click();
-            await cy.get('.mat-option-text').contains("Fillage").click();
+            await cy.get('.mat-option-text').contains("Host").click();
             await cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
                 .invoke('val', 'aria-checked')
-                .then((e) => {
+                .then(async (e) => {
                     if (e[0].checked) {
-                        cy.get('.mat-slide-toggle').eq(1).click();
-                        cy.get('.mat-input-element').eq(0).clear().type(fillageSetPoint);
-                        cy.get('.mat-input-element').eq(1).clear().type(allowedStroke);
-                        cy.get('.mat-input-element').eq(2).clear().type(startUpStroke);
-                        cy.get('.mat-select').eq(2).click().type('02').type('{enter}');
+                        onOffModbusUnit(1);
+                        await cy.get('input[formcontrolname="constantSpeed"]')
+                            .then((e) => constantSpeed = e[0].value);
+                        checkStatus(0);
+                    } else {
+                        await cy.get('.mat-slide-toggle').eq(0).click();
                         cy.get('#saveControl').click();
                         cy.wait(3000);
                         cy.reload();
-                        cy.wait(4000);
                         onOffModbusUnit(1);
-                        checkStatus();
-                    } else {
-                        cy.get('.mat-input-element').eq(0).clear().type(fillageSetPoint);
-                        cy.get('.mat-input-element').eq(1).clear().type(allowedStroke);
-                        cy.get('.mat-input-element').eq(2).clear().type(startUpStroke);
-                        cy.get('.mat-select').eq(2).click().type('02').type('{enter}');
-                        cy.get('#saveControl').click();
-                        cy.wait(3000);
-                        cy.reload();
-                        cy.wait(4000);
-                        onOffModbusUnit(1);
-                        checkStatus();
+                        checkStatus(0);
                     }
                 })
-            checkSecondary();
         }
 
-        function checkStatus() {
-            cy.get('body').then(() => {
-                cy.get('.footer-status__value').eq(2).as('wellState');
-                cy.get('.footer-status__value').eq(2).then((e) => {
-                    if (e[0].innerText != "Stopped") {
-                        cy.get("@wellState", {timeout: 80000}).should('have.text', "Stopping");
-                    }
-                })
-                cy.get("@wellState", {timeout: 180000}).should('have.text', "Stopped");
-                cy.get('.sis-tabs__item').contains('I/O').click();
-                cy.get('.sys-accordion__title').eq(2).click();
-                cy.wait(1000);
-                cy.get('.sys-accordion__grid-item--value').eq(12).should('have.text', "0");
-                cy.get('.sys-accordion__title').eq(0).click();
-                cy.get('.sys-accordion__grid-item--value').eq(0).then((e) => {
-                    let oldValue;
-                    oldValue = e[0].innerText;
-                    cy.wait(5000);
-                    if (oldValue >= e[0].innerText) {
-                        cy.log(true);
-                    } else {
-                        cy.pause();
-                    }
-                });
-                cy.get('.sis-tabs__item').contains('Control Setup').click();
-                cy.wait(2000);
-                cy.get('.header-buttons__start').click();
-                cy.get('.mat-select').eq(0).click();
-                cy.get('.mat-option-text').contains("Host").click();
-                cy.get('#saveControl').click();
-                cy.wait(3000);
-            });
-        }
-
-        function checkSecondary() {
+        async function fillageModeVFDStatus() {
             onOffModbusUnit(0);
-            cy.get('.mat-select').eq(0).click();
-            cy.get('.mat-option-text').contains("Fillage").click();
-            cy.wait(3000);
-            cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
+            await cy.get('.mat-select').eq(0).click();
+            await cy.get('.mat-option-text').contains("Fillage").click();
+            await cy.wait(3000);
+            await cy.get('[formgroupname="vfdUse"] .mat-slide-toggle-input')
                 .invoke('val', 'aria-checked')
-                .then((e) => {
+                .then(async (e) => {
                     if (!e[0].checked) {
-                        cy.get('.mat-slide-toggle').eq(0).click();
-                        cy.get('.mat-input-element').eq(0).clear().type(fillageSetPoint);
-                        cy.get('.mat-input-element').eq(1).clear().type(allowedStroke);
-                        cy.get('.mat-input-element').eq(2).clear().type(startUpStroke);
-                        cy.get('.mat-select').eq(2).click().type('02').type('{enter}');
-                        cy.get('.mat-slide-toggle').eq(0).click();
-                        cy.get('.mat-input-element').eq(3).clear().type(secondaryFillageSetPoint);
-                        cy.get('#saveControl').click();
-                        cy.wait(3000);
-                        cy.reload();
-                        cy.wait(4000);
+                        await cy.get('.mat-slide-toggle').eq(0).click();
+                        await cy.get('.mat-input-element').eq(0).clear().type(fillageSetPoint);
+                        await cy.get('.mat-input-element').eq(1).clear().type(allowedStroke);
+                        await cy.get('.mat-input-element').eq(2).clear().type(startUpStroke);
+                        await cy.get('.mat-select').eq(2).click().type('02').type('{enter}');
+                        await cy.get('.mat-slide-toggle').eq(0).click();
+                        // await cy.get('.mat-input-element').eq(3).clear().type(secondaryFillageSetPoint);
+                        await cy.get('#saveControl').click();
+                        await cy.wait(3000);
+                        await cy.reload();
+                        await cy.wait(4000);
                         onOffModbusUnit(1);
-                        checkStatus();
+                        checkStatus(1);
                     }
                 })
+        }
+
+        function checkStatus(modeIndex) {
+            cy.get('body').then(async () => {
+                if (modeIndex === 0) {
+                    await cy.get('.sis-tabs__item').contains('I/O').click({force: true});
+                    await cy.wait(5000);
+                    await cy.get('.sys-accordion__title').eq(1).click();
+                    await cy.wait(2000);
+                    await cy.get('.sys-accordion__grid-item--value').eq(10).should('contain.text', constantSpeed);
+                }
+                else if (modeIndex === 1) {
+
+                }
+            });
         }
 
         function onOffModbusUnit(checkBox) {

@@ -175,6 +175,8 @@ describe('Digital channels', () => {
             await cy.get('.mat-select-value-text > span').eq(0).should('contain.text', "Module 8DI/8DO");
             await cy.get('.mat-select-value-text > span').eq(1).should('contain.text', "DO 01");
             await cy.get('.mat-flat-button').eq(0).click();
+
+            onOffModbusUnit(1);
         }
 
         function onOffModbusUnit(checkBox) {
