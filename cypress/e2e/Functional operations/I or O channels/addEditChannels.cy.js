@@ -1,11 +1,7 @@
-const {func} = require("assert-plus");
-
 describe('Custom Malfunction', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "KWM+ 135";                         //Well name
-
-    let customMalf = 0;
 
     it('Check the work of Custom Malfunction', () => {
         // test commands
@@ -13,10 +9,9 @@ describe('Custom Malfunction', () => {
             cy.get('.well-list__group').contains(wellName).click();
             cy.wait(1000);
             cy.get('button[class=mat-button-toggle-button]').contains('Well Manager').click();
-            // onOffModbusUnit(0);
 
+            onOffModbusUnit(0);
             setChannels();
-            // checkAddChannels();
         }
 
         async function setChannels() {
@@ -81,7 +76,7 @@ describe('Custom Malfunction', () => {
 
             await cy.wait(2000);
 
-            // await changeOPMode();
+            await changeOPMode();
             await checkAddChannels();
         }
 
@@ -116,11 +111,11 @@ describe('Custom Malfunction', () => {
             await cy.get('input[formcontrolname="y1"]').should('have.value', 0);
             await cy.get('input[formcontrolname="y2"]').should('have.value', 60);
             await cy.get('.mat-checkbox-input').eq(1).should('be.checked');
-            await cy.get('.mat-select-value-text > span').eq(4).should('contain.text',"Min");
-            await cy.get('input[formcontrolname="value"]').should('have.value',20);
-            await cy.get('input[formcontrolname="thresholdDuration"]').should('have.value',2);
-            await cy.get('input[formcontrolname="malfunctionLimit"]').should('have.value',4);
-            await cy.get('.mat-input-element').eq(7).should('have.value',"01");
+            await cy.get('.mat-select-value-text > span').eq(4).should('contain.text', "Min");
+            await cy.get('input[formcontrolname="value"]').should('have.value', 20);
+            await cy.get('input[formcontrolname="thresholdDuration"]').should('have.value', 2);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').should('have.value', 4);
+            await cy.get('.mat-input-element').eq(7).should('have.value', "01");
             await cy.get('.mat-flat-button').eq(0).click();
 
             //check VFD speed channel
@@ -145,7 +140,7 @@ describe('Custom Malfunction', () => {
             await cy.get('.mat-select-value-text > span').eq(3).should('contain.text', "False (opened)");
             await cy.get('input[formcontrolname="thresholdDuration"]').should('have.value', 1);
             await cy.get('input[formcontrolname="malfunctionLimit"]').should('have.value', 3);
-            await cy.get('.mat-input-element').eq(3).should('have.value',"01");
+            await cy.get('.mat-input-element').eq(3).should('have.value', "01");
 
             await cy.get('.mat-flat-button').eq(0).click();
 
@@ -157,6 +152,73 @@ describe('Custom Malfunction', () => {
             await cy.get('.mat-select-value-text > span').eq(1).should('contain.text', "DO 04");
             await cy.get('.mat-flat-button').eq(0).click();
 
+            await editChannels();
+        }
+
+        async function editChannels() {
+            //edit custom analog
+            await cy.get('.sys-accordion__grid-item').eq(14).contains('Custom Analog').click({force: true});
+            await cy.get('input[formcontrolname="name"]').clear().type("New Custom Analog");
+            await cy.get('.mat-select').eq(0).click().get('.mat-option').contains("Module SYNC 1").click();
+            await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("AI 02").click();
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("0-20mA").click();
+            await cy.get('.mat-select').eq(3).click().get('.mat-option').contains("A").click();
+            await cy.get('input[formcontrolname="y1"]').clear().type(2);
+            await cy.get('input[formcontrolname="y2"]').clear().type(40);
+            await cy.get('.sis-icon io-malfunction__delete').click({force: true});
+            await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.wait(2000);
+
+            //edit VFD Speed Channel
+            await cy.get('.sys-accordion__grid-item').eq(22).contains('VFD Speed').click({force: true});
+            await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("Module SYNC 1").click();
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("AO 01").click();
+            await cy.get('.mat-select').eq(3).click().get('.mat-option').contains("0-10V").click();
+            await cy.get('.mat-select').eq(4).click().get('.mat-option').contains("Hz").click();
+            await cy.get('input[formcontrolname="y1"]').clear().type(0);
+            await cy.get('input[formcontrolname="y2"]').clear().type(60);
+            await cy.get('.io-add-malf').click();
+            await cy.get('.mat-checkbox-input').eq(1).check({force: true});
+            await cy.get('.mat-select').eq(4).click().get('.mat-option').contains("Min").click();
+            await cy.get('input[formcontrolname="value"]').clear().type(20);
+            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(2);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(4);
+            await cy.get('.mat-input-element').eq(7).clear().type(1);
+            await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.wait(2000);
+
+            //edit Buzzer channel digital
+            await cy.get('.sys-accordion__grid-item').eq(26).contains('Buzzer').click({force: true});
+            await cy.get('.mat-select').eq(2).click().get('.mat-option').contains("DO 01").click();
+            await cy.get('.sis-icon io-malfunction__delete').click({force: true});
+            await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.wait(2000);
+
+            //edit custom digital
+            await cy.get('.sys-accordion__grid-item').eq(30).contains('Custom Digital').click({force: true});
+            await cy.get('.mat-checkbox-input').check({force: true});
+            await cy.get('input[formcontrolname="name"]').clear().type("New Custom Digital");
+            await cy.get('.mat-select').eq(1).click().get('.mat-option').contains("DO 01").click();
+            await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.wait(2000);
+
+            // edit Motor channel
+            await cy.get('.sys-accordion__grid-item').eq(42).contains('Motor').click({force: true});
+            await cy.get('.io-add-malf').click();
+            await cy.get('.mat-checkbox-input').eq(1).check({force: true});
+            await cy.get('.mat-select').eq(3).click().get('.mat-option').contains("False (opened)").click();
+            await cy.get('input[formcontrolname="thresholdDuration"]').clear().type(1);
+            await cy.get('input[formcontrolname="malfunctionLimit"]').clear().type(3);
+            await cy.get('.mat-input-element').eq(3).clear().type(1);
+            await cy.get('.mat-flat-button').eq(1).click();
+
+            await cy.wait(2000);
+
+            await changeOPMode();
             await checkEditChannels();
         }
 
