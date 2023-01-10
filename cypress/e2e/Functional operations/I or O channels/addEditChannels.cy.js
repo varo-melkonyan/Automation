@@ -1,9 +1,9 @@
-describe('Custom Malfunction', () => {
+describe('Channels', () => {
     const validLogin = "varazdat.gm@ovaktechnologies.com";    //valid login
     const validPassword = "Aa1234$#@!";                       //valid password
     const wellName = "KWM+ 135";                         //Well name
 
-    it('Check the work of Custom Malfunction', () => {
+    it('Check the work of add/edit channels', () => {
         // test commands
         function commands() {
             cy.get('.well-list__group').contains(wellName).click();
